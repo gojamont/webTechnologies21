@@ -1,0 +1,8 @@
+# hiding env files
+*.env
+
+#py cache
+__pycache__
+
+# migrations
+migrations

@@ -1,0 +1,24 @@
+{% extends "index.html" %}
+
+{% block title %}Register{% endblock %}
+
+{% block main %}
+        <form action="#">
+            <h1>Register</h1>
+
+            <div>
+                <input type="text" placeholder="Firs Name">
+                <input type="email" placeholder="Email">
+                <input type="text" placeholder="Username">
+
+            </div>
+
+            <div>
+                <input type="text" placeholder="Last Name">
+                <input type="text" placeholder="Address">
+                <input type="password" placeholder="Password">
+            </div>
+            
+            <input class="button" type="button" value="Register">
+        </form>
+{% endblock %}
