@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/7a0330ed94.js" crossorigin="anonymous"></script>
+
+    {% load static %}
+    <!-- css files -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- js files -->
+    <script src="{% static 'js/functions.js' %}" crossorigin="anonymous"></script>
+
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
