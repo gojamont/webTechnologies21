@@ -2,19 +2,30 @@
 
 {% block title %}About us{% endblock %}
 
-{% block main %}
-        <h1>About us...</h1>
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/aboutPageStyles.css' %}">{% endblock %}
 
+{% block main %}
+
+<section>
+        <h1>About us...</h1>
+</section>
+<section>
         <h2>About Company</h2>
         <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus nostrum repellendus iusto odit obcaecati! Nesciunt, animi omnis commodi fugiat temporibus ullam ducimus sapiente quis architecto quaerat ratione accusantium eveniet corrupti.</p>
-
+</section>
+<section>
         <h2>Vision</h2>
         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi aspernatur delectus praesentium cum nostrum hic quas ipsum quisquam nesciunt quae saepe, neque dolorum veniam earum in quasi recusandae debitis eaque!</p>
 
         <h2>Teams Members</h2>
-
-        <img src="#" alt="Team member img">
-        <img src="#" alt="Team member img">
-        <img src="#" alt="Team member img">
-        <img src="#" alt="Team member img">
+</section>
+<section>
+        <div class="about-gallery">
+                <img src="#" alt="Team member img">
+                <img src="#" alt="Team member img">
+                <img src="#" alt="Team member img">
+                <img src="#" alt="Team member img">
+        </div>
+</section>
 {% endblock %}

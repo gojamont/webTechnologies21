@@ -3,6 +3,11 @@
     font-family: "Inter", sans-serif;
 }
 
+* {
+    box-sizing: border-box;
+    font-weight: 200;
+}
+
 html {
     height: 100%;
 }
