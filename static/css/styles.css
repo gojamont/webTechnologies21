@@ -13,6 +13,7 @@ html, body {
 
 body {
    min-height: 100vh; 
+   overflow-x: hidden;
 }
 
 nav {
@@ -75,7 +76,6 @@ header, footer {
 }
 
 header {
-    height: 15%;
     top: 0;
 }
 .nav-center {
@@ -90,7 +90,6 @@ header, footer, header a, footer a {
 
 footer{
     bottom: 0;
-    height: 20%;
     min-height: 200px;
     background-color: black;
     padding: 1em;
