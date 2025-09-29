@@ -1,6 +1,8 @@
 
 :root {
     font-family: "Inter", sans-serif;
+    --form-border-radius: 21px;
+    --button-border-radius: 21px;
 }
 
 * {

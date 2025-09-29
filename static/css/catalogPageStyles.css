@@ -1,0 +1,58 @@
+main {
+    display: flex;
+}
+
+.ProductsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-auto-rows: 250px;
+    gap: 1em;
+}
+
+.ProductsContainer, .ProductCard{
+    align-items: center;
+}
+
+.ProductCard {
+    border-radius: var(--button-border-radius);
+    border: 1px solid #D9D9D9;
+    padding: 1em;
+    width: 100%;
+    height: 100%;
+    transition: box-shadow 0.25s ease-in;
+}
+
+.ProductCard:hover{
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.productSideBar {
+    flex: 0.2;
+    border: 1px solid #C0C0C0;
+    background-color: rgba(217, 217, 217, 0.24);
+}
+
+.productSection {
+    flex: 0.8;
+    margin: 1em;
+}
+
+.leftFilterBar {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    width: 80%;
+    margin:auto;
+    gap: 1em;
+    top: 20%;
+}
+
+.leftFilterBar button {
+    height: 60px;
+    border-radius: 6px;
+    border: 1px solid #C0C0C0;
+    font-weight: 100;
+}
+.ProductCard .productPrice {
+    font-weight:500;
+}

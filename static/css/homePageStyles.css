@@ -30,7 +30,7 @@
 #discoverBtn {
     z-index: 2;
     position: relative;
-    border-radius: 127px;
+    border-radius: var(--button-border-radius);
     height: 190px;
     width: 524px;
     background-color: rgba(255, 255, 255, 0.2);

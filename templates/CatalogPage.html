@@ -1,51 +1,55 @@
 {% extends "index.html" %}
 
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/catalogPageStyles.css' %}">{% endblock %}
+
 {% block title %}Catalog{% endblock %}
 
 {% block main %}
-        <h1>Products</h1>
-
+  <section class="productSideBar">
         <div class="leftFilterBar">
             <button>Filter By Category</button>
             <button>Order By Price</button>
         </div>
-
-        <div class="ProductsConteiner">
-
+    </section>
+      <section class="productSection">
+        <h1>Products</h1>
+        <div class="ProductsContainer">
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <strong><p class="productPrice">0.00$</p></strong>
             </div>
 
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <strong><p class="productPrice">0.00$</p></strong>
             </div>
 
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <p class="productPrice">0.00$</P>
             </div>
 
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <p class="productPrice">0.00$</p>
             </div>
 
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <p class="productPrice">0.00$</p>
             </div>
 
             <div class="ProductCard">
                 <img class="ProductImage" src="#" alt="Product img here...">
                 <p class="productTitle">Product Name</p>
-                <P class="productPrice">0.00$</P>
+                <p class="productPrice">0.00$</p>
             </div>
         </div>
+    </section>
 {% endblock %}
