@@ -1,0 +1,47 @@
+.loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
+    max-width: 500px;
+    margin: 2em;
+}
+
+.loginForm h1, .loginForm p {
+    font-weight: 200;
+}
+
+.loginForm input {
+    height: 60px;
+    border-radius: 21px;
+    border: 1px solid #D9D9D9;
+    padding: 0 1em;
+}
+
+.loginForm input, .loginForm button {
+    font-weight: 100;
+    font-family: inherit;
+    max-height: 60px;
+}
+
+.loginForm button {
+width: 162px;
+height: 52px;
+ border-radius: 21px;
+}
+.formButtonField {
+    display: flex;
+    gap: 1em;
+}
+#loginBtn {
+    border: 1px solid #FFFFFF;
+    background-color: #000000;
+    color: white;
+    flex: 0.4;
+}
+
+#registerBtn {
+    border: 1px solid #D9D9D9;
+    background-color: #FFFFFF;
+    flex: 0.6;
+}

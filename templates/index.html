@@ -4,10 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/7a0330ed94.js" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet">
 
     {% load static %}
     <!-- css files -->
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    
+    <!-- a link for adding customised styles files -->
+    {% block styles %}{% endblock %}
     
     <!-- js files -->
     <script src="{% static 'js/functions.js' %}" crossorigin="anonymous"></script>
@@ -17,21 +23,41 @@
 <body>
     <header>
     <nav>
-        <ul>
-            <li><a href="/"><img src="#" alt="Logo"></a></li>
-            <li><a href="/">Home</a></li>
-            <li><a href="about">About us</a></li>
-            <li><a href="#">Contact us</a></li>
-            <li><a href="catalog">Catalog</a></li>
-            <li><input type="search" class="input" id="search"></li>
-            <li><a href="#"><i class="fa-solid fa-cart-shopping"></i></a></li>
-            <li><a href="#"><i class="fa-solid fa-user"></i></a></li>
-        </ul>
+            <div class="nav-left">
+                <ul>
+                    <li class="logo"><a href="/"><img src="#" alt="Logo"></a></li>
+                </ul>
+            </div>
+            <div class="nav-center">
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="about">About us</a></li>
+                    <li><a href="#">Contact us</a></li>
+                    <li><a href="catalog">Catalog</a></li>
+                </ul>
+            </div>
+            <div class="nav-right">
+                <ul>
+                    <li><input type="search" class="input" id="search"></li>
+                    <li><a href="#"><i class="fa-solid fa-cart-shopping" id="shopping-cart"></i></a></li>
+                    <li><a href="#"><i class="fa-solid fa-user" id="user"></i></a></li>
+                </ul>
+            </div>
     </nav>
     </header>
     <main>
         {% block main %}{% endblock %}
     </main>
-    <footer>this is the footer</footer>
+    <footer>
+        <article>
+        <h2>Company details</h2>
+        <p>
+            ByteNest Technologies GmbH,
+            2188 Gerschler Shoal,
+            Nord Livinia, Hamburg, 21741,
+            Germany
+        </p>
+        </article>
+    </footer>
 </body>
 </html>

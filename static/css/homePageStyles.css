@@ -1,0 +1,123 @@
+@keyframes navBar-fade-in {
+    from{
+        background-color: rgba(0,0,0,0.0);
+    }to{
+        background-color: rgba(0,0,0, 1);
+    }
+}
+
+.backgroundImage{
+    background: url('../images/backgroundImage.jpg') no-repeat;
+    background-size: contain;
+    background-position: center;
+    width: 100%;
+    aspect-ratio: 16 / 9; 
+    position: relative;
+    align-items: center;
+    justify-content: center;
+
+    display: flex;
+}
+
+.backgroundImage::before {
+    content: '';
+    background-color: rgba(0, 0, 0, 0.6);
+    inset: 0;
+    z-index: 1;
+    position: absolute;
+}
+
+#discoverBtn {
+    z-index: 2;
+    position: relative;
+    border-radius: 127px;
+    height: 190px;
+    width: 524px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border: 1px solid white;
+    color: white;
+    font-size: 30px;
+    font-family: inherit;
+    font-weight:100;
+}
+header {
+    position: fixed;
+}
+header, footer {
+     z-index: 3;
+    background-color: rgba(0, 0, 0, .8);
+    animation: navBar-fade-in linear;
+    animation-timeline: scroll(root);
+    animation-range: 0 300px;
+}
+
+.category-gallery, .promo-container {
+    padding: 1em 4em 2em;
+}
+.category-gallery h2 {
+    font-family: inherit;
+    font-weight: 100;
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-auto-rows: 300px;
+    gap: 1em;
+}
+
+.category-card {
+    background-color: lightgrey;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden
+}
+.category-card-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 30px;
+    opacity: 0;
+    z-index: 2;
+    transition: opacity 0.4s ease;
+}
+
+.category-card:hover .category-card-overlay {
+    opacity: 1;
+}
+
+.category-card-background-container {
+    inset: 0;
+    z-index: 1;
+    position: absolute;
+}
+
+.category-card-background-container img 
+{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.promo-container section {
+    display: flex;
+    align-items: center;
+    
+}
+.promo-container article {
+    flex: 0.5;
+    padding: 1em 0;
+}
+
+.promo-container article:not(h1){
+    font-weight: 100;
+}
+
+.promo-container article h1 {
+    font-weight: 200;
+}

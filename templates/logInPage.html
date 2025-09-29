@@ -2,13 +2,19 @@
 
 {% block title %}Log in{% endblock %}
 
+<!-- adding styles for loginPage only -->
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/loginPageStyles.css' %}">{% endblock %}
+
 {% block main %}
-        <form action="#">
-            <h1>Log in</h1>
-            <input type="text" placeholder="username">
-            <input type="password" placeholder="password">
-            <input class="button" type="button" value="log in">
-            <input class="button" value="No acount? Register">
-            <p>Forgot ypur password? <a href="#">Change it here!</a></p>
+        <form action="#" class="loginForm">
+            <h1>Login</h1>
+            <input type="text" placeholder="Username">
+            <input type="password" placeholder="Password">
+            <div class="formButtonField">
+                <button id="loginBtn">Login</button>
+                <button id="registerBtn">No account? Register</button>
+            </div>
+            <p>Forgot your password? <a href="#">Change it here!</a></p>
         </form>
 {% endblock %}

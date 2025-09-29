@@ -2,5 +2,51 @@
 
 {% block title %}Home{% endblock %}
 
+<!-- adding styles for homePage only -->
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/homePageStyles.css' %}">{% endblock %}
+
 {% block main %}
+<div class="backgroundImage">
+    <button id="discoverBtn"> Discover our new deals</button>
+</div>
+<div class="category-gallery">
+    <section>
+        <h2> Shop by Category </h2>
+        <div class="category-grid">
+            <div class="category-card">
+                <div class="category-card-overlay"> Office </div>
+                    <div class="category-card-background-container">
+                        <img src="{% static 'images/officeCardImage.jpg' %}" alt="image1" class="categoryBackgroundImage">
+                    </div>
+            </div>
+            <div class="category-card">
+                <div class="category-card-overlay"> Gaming </div>
+                <div class="category-card-background-container">
+                    <img src="{% static 'images/gamingCardImage.jpg' %}" alt="image2" class="categoryBackgroundImage">
+                </div>
+            </div>
+            <div class="category-card">
+                <div class="category-card-overlay"> Study </div>
+                    <div class="category-card-background-container">
+                        <img src="{% static 'images/studyCardImage.jpg' %}" alt="image3" class="categoryBackgroundImage">
+                    </div>
+            </div>
+        </div>
+    </section>
+</div>
+<div class="promo-container">
+    <section>
+        <article>
+            <img src="{% static 'images/laptopOffer.jpg' %}" alt="laptopImage">
+        </article>
+        <article>
+            <div class="infoArea">
+                <h1>Buy your laptop today!</h1>
+                <p>Get 20% off today!</p>
+                <p>Discount code: <b>AUTUMN25</b></p>
+            </div>
+        </article>
+    </section>
+</div>
 {% endblock %}

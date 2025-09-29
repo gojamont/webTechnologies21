@@ -1,0 +1,103 @@
+
+:root {
+    font-family: "Inter", sans-serif;
+}
+
+html {
+    height: 100%;
+}
+
+html, body {
+    margin: 0; 
+}
+
+body {
+   min-height: 100vh; 
+}
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* children of nav */
+nav ul {
+    display: inline flex;
+    list-style-type: none;
+    gap: 1.5em;
+}
+
+.nav-left {
+    flex: 0.2;
+}
+.nav-center {
+    flex: 0.7;
+}
+.nav-center li a {position: relative; padding-bottom: 0.5rem;}
+
+.nav-center li a::after {
+    content: '';
+    height: 1px;
+    background-color: #fff;
+    transform: scaleX(0);
+    transform-origin: center;
+    transition: transform 0.5s ease-out;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+}
+
+.nav-center li:hover a::after{
+    transform: scaleX(1);
+}
+
+.nav-right {
+    flex: 0.1;
+}
+#search, #shopping-cart {
+    display: none;
+}
+
+/* main style for header and footer */
+header, footer {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    z-index: 3;
+    background-color: black;
+}
+
+header {
+    height: 15%;
+    top: 0;
+}
+.nav-center {
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 400;
+}
+
+header, footer, header a, footer a {
+    color: white;
+}
+
+footer{
+    bottom: 0;
+    height: 20%;
+    min-height: 200px;
+    background-color: black;
+    padding: 1em;
+    font-weight: 100;
+    font-family: inherit;
+}
+ footer p {
+    white-space: pre-line;
+    line-height: 1.5rem;
+ }
