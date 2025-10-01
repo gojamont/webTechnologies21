@@ -116,7 +116,7 @@ header, footer {
 
 .promo-container article {
     flex: 0.5;
-    padding: 1em 0;
+    padding: 1em;
 }
 
 .promo-container article:not(h1){
