@@ -61,8 +61,7 @@ header, footer {
 
 .category-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-auto-rows: 300px;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1em;
 }
 
@@ -70,6 +69,7 @@ header, footer {
     background-color: lightgrey;
     border-radius: 32px;
     position: relative;
+    aspect-ratio: 1 / 1;
     overflow: hidden
 }
 .category-card-overlay {
@@ -136,5 +136,11 @@ header, footer {
     }
     .promo-container section article {
          flex: 1 0 100%;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(1, 1fr);
+        gap: 1em;
     }
 }
