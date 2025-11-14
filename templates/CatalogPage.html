@@ -13,15 +13,13 @@
                 <div class="filter-menu" id="filterMenu" hidden>
                     <form id="filterForm">
                         <fieldset class="filter-group">
-                            <legend>Price</legend>
-                            <label>
-                                Min:
-                                <input type="number" name="price_min" id="priceMin" min="0" step="0.01" placeholder="0">
-                            </label>
-                            <label>
-                                Max:
-                                <input type="number" name="price_max" id="priceMax" min="0" step="0.01" placeholder="1000">
-                            </label>
+              <legend>Price</legend>
+              <label>Min:
+                <input type="number" name="price_min" id="priceMin" step="0.01" placeholder="">
+              </label>
+              <label>Max:
+                <input type="number" name="price_max" id="priceMax" step="0.01" placeholder="">
+              </label>
                         </fieldset>
 
                         <fieldset class="filter-group">
@@ -69,12 +67,15 @@
 
     <script>
     (function() {
-      const filterToggle = document.getElementById('filterToggle');
-      const filterMenu = document.getElementById('filterMenu');
-      const filterForm = document.getElementById('filterForm');
-      const categoryOptions = document.getElementById('categoryOptions');
-      const brandOptions = document.getElementById('brandOptions');
-      const productsContainer = document.querySelectorAll('.ProductCard');
+    const toggle = id => document.getElementById(id);
+    const filterToggle = toggle('filterToggle');
+    const filterMenu = toggle('filterMenu');
+    const priceMin = toggle('priceMin');
+    const priceMax = toggle('priceMax');
+    const products = Array.from(document.querySelectorAll('.ProductCard'));
+    const filterForm = document.getElementById('filterForm');
+    const categoryOptions = document.getElementById('categoryOptions');
+    const brandOptions = document.getElementById('brandOptions');
 
       function toggleFilterMenu() {
         const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
@@ -100,13 +101,61 @@
       filterMenu.addEventListener('click', function(e) {
         e.stopPropagation();
       });
+    // set min/max attributes (no visible text)
+    function setPriceBounds(){
+      const prices = products.map(p => parseFloat(p.dataset.price)).filter(n => !Number.isNaN(n));
+      if (!prices.length) {
+        priceMin.disabled = priceMax.disabled = true;
+        return;
+      }
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      priceMin.disabled = priceMax.disabled = false;
+      priceMin.min = min; priceMin.max = max; priceMin.placeholder = min.toFixed(2);
+      priceMax.min = min; priceMax.max = max; priceMax.placeholder = max.toFixed(2);
+    }
 
+    // Clamp and normalize on blur
+    function clampInput(input){
+      input.addEventListener('blur', () => {
+        if (input.disabled || input.value === '') return;
+        let v = parseFloat(input.value);
+        if (Number.isNaN(v)) { input.value = ''; return; }
+        const min = input.hasAttribute('min') ? parseFloat(input.min) : -Infinity;
+        const max = input.hasAttribute('max') ? parseFloat(input.max) : Infinity;
+        if (v < min) v = min;
+        if (v > max) v = max;
+        input.value = v.toFixed(2);
+      });
+    }
+
+    setPriceBounds();
+    clampInput(priceMin); clampInput(priceMax);
+
+    // client-side filter apply/clear
+    filterForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const min = parseFloat(priceMin.value);
+      const max = parseFloat(priceMax.value);
+      products.forEach(card => {
+        const p = parseFloat(card.dataset.price);
+        let show = true;
+        if (!Number.isNaN(min) && p < min) show = false;
+        if (!Number.isNaN(max) && p > max) show = false;
+        card.style.display = show ? '' : 'none';
+      });
+    });
+
+    document.getElementById('clearFilters').addEventListener('click', () => {
+      priceMin.value = priceMax.value = '';
+      products.forEach(c => c.style.display = '');
+    });
       // from productcards data attrs
       function populateOptions() {
         const categories = new Set();
         const brands = new Set();
 
-        productsContainer.forEach(card => {
+        products.forEach(card => {
           const c = (card.dataset.category || '').trim();
           const b = (card.dataset.brand || '').trim();
           if (c) categories.add(c);
@@ -152,7 +201,7 @@
         const selectedCategories = Array.from(filterForm.querySelectorAll('input[name="category"]:checked')).map(i => i.value);
         const selectedBrands = Array.from(filterForm.querySelectorAll('input[name="brand"]:checked')).map(i => i.value);
 
-        productsContainer.forEach(card => {
+        products.forEach(card => {
           let show = true;
           const price = parseFloat(card.dataset.price);
           const category = (card.dataset.category || '').trim();
@@ -170,7 +219,7 @@
 
       function clearFilters() {
         filterForm.reset();
-        productsContainer.forEach(card => card.style.display = '');
+        products.forEach(card => card.style.display = '');
       }
 
       populateOptions();
