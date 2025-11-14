@@ -5,18 +5,14 @@ main {
 .ProductsContainer {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    grid-auto-rows: 250px;
+    /* Let the card content determine the row height */
+    grid-auto-rows: auto;
     gap: 1em;
 }
 
-.ProductsContainer, .ProductCard{
+/* Removed .ProductCard from this rule */
+.ProductsContainer {
     align-items: center;
-}
-
-.ProductImage{
-  width: 20vw;
-  height: 20vh;
-  object-fit: contain; /* This prevents distortion */
 }
 
 .ProductCard {
@@ -26,7 +22,25 @@ main {
     width: 100%;
     height: 100%;
     transition: box-shadow 0.25s ease-in;
+    
+    /* ADDED: Use flexbox to stack content vertically */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Helps keep button at the bottom */
 }
+
+/* * ADDED: This is the main fix. 
+* We are constraining the image to a fixed height 
+* and making sure it doesn't stretch.
+*/
+.ProductImage {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 0.5em;
+}
+
 
 .ProductCard:hover{
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -36,6 +50,9 @@ main {
     flex: 0.2;
     border: 1px solid #C0C0C0;
     background-color: rgba(217, 217, 217, 0.24);
+    
+    /* ADDED: Ensure sidebar is tall enough */
+    min-height: 100vh;
 }
 
 .productSection {

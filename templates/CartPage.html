@@ -6,24 +6,16 @@
 <section class="cartSection">
     <h1>Your Shopping Cart</h1>
     <div id="cartContainer">
-        <!-- Cart items will be rendered here by JS -->
-    </div>
+        </div>
     <div id="cartTotal" style="margin-top:2em; font-weight:600;"></div>
     <button id="clearCartBtn" style="margin-top:1em;">Clear Cart</button>
 </section>
 <script>
-document.addEventListener("DOMContentLoaded", function () {</script>
-    function getCart() {
-        const cart = localStorage.getItem("cart");
-        return cart ? JSON.parse(cart) : [];
-    }
-
-    function saveCart(cart) {
-        localStorage.setItem("cart", JSON.stringify(cart));
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    // getCart() and saveCart() are loaded from static/js/functions.js
 
     function renderCart() {
-        const cart = getCart();
+        const cart = getCart(); // This global function works
         const container = document.getElementById("cartContainer");
         const totalDiv = document.getElementById("cartTotal");
         container.innerHTML = "";
@@ -59,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {</script>
                 const idx = parseInt(btn.getAttribute("data-idx"));
                 const cart = getCart();
                 cart.splice(idx, 1);
-                saveCart(cart);
+                saveCart(cart); // This global function works
                 renderCart();
             });
         });
@@ -74,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function () {</script>
 });
 </script>
 <style>
-.cart</style>Section {
+.cartSection {
     max-width: 600px;
     margin: 2em auto;
     padding: 2em;

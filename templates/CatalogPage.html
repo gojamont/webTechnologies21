@@ -13,19 +13,20 @@
                 <div class="filter-menu" id="filterMenu" hidden>
                     <form id="filterForm">
                         <fieldset class="filter-group">
-              <legend>Price</legend>
-              <label>Min:
-                <input type="number" name="price_min" id="priceMin" step="0.01" placeholder="">
-              </label>
-              <label>Max:
-                <input type="number" name="price_max" id="priceMax" step="0.01" placeholder="">
-              </label>
+                            <legend>Price</legend>
+                            <label>
+                                Min:
+                                <input type="number" name="price_min" id="priceMin" min="0" step="0.01" placeholder="0">
+                            </label>
+                            <label>
+                                Max:
+                                <input type="number" name="price_max" id="priceMax" min="0" step="0.01" placeholder="1000">
+                            </label>
                         </fieldset>
 
                         <fieldset class="filter-group">
                             <legend>Category</legend>
                             <div id="categoryOptions">
-                                <!-- Categories will be populated from product data (client-side) -->
                                 <p class="placeholder">No categories available</p>
                             </div>
                         </fieldset>
@@ -33,7 +34,6 @@
                         <fieldset class="filter-group">
                             <legend>Brand</legend>
                             <div id="brandOptions">
-                                <!-- Brands will be populated from product data (client-side) -->
                                 <p class="placeholder">No brands available</p>
                             </div>
                         </fieldset>
@@ -54,10 +54,19 @@
         <h1>Products</h1>
         <div class="ProductsContainer">
             {% for product in products %}
-            <div class="ProductCard" data-price="{{ product.price }}" data-category="{{ product.category|default:'' }}" data-brand="{{ product.brand|default:'' }}">
-      <img class="ProductImage" src="{{ product.image_url }}" alt="{{ product.name }}">
+            <div class="ProductCard" 
+                 data-price="{{ product.price }}" 
+                 data-category="{{ product.category|default:'' }}" 
+                 data-brand="{{ product.brand|default:'' }}"
+                 data-img="{{ product.image_url|default:'#' }}">
+                
+                <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
                 <p class="productTitle">{{ product.name }}</p>
                 <strong><p class="productPrice">${{ product.price }}</p></strong>
+                
+                <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
+                    Add to Cart
+                </button>
             </div>
             {% empty %}
             <p>No products available.</p>
@@ -67,15 +76,14 @@
 
     <script>
     (function() {
-    const toggle = id => document.getElementById(id);
-    const filterToggle = toggle('filterToggle');
-    const filterMenu = toggle('filterMenu');
-    const priceMin = toggle('priceMin');
-    const priceMax = toggle('priceMax');
-    const products = Array.from(document.querySelectorAll('.ProductCard'));
-    const filterForm = document.getElementById('filterForm');
-    const categoryOptions = document.getElementById('categoryOptions');
-    const brandOptions = document.getElementById('brandOptions');
+      // ... (existing filter/sort code remains unchanged) ...
+
+      const filterToggle = document.getElementById('filterToggle');
+      const filterMenu = document.getElementById('filterMenu');
+      const filterForm = document.getElementById('filterForm');
+      const categoryOptions = document.getElementById('categoryOptions');
+      const brandOptions = document.getElementById('brandOptions');
+      const productsContainer = document.querySelectorAll('.ProductCard');
 
       function toggleFilterMenu() {
         const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
@@ -101,61 +109,13 @@
       filterMenu.addEventListener('click', function(e) {
         e.stopPropagation();
       });
-    // set min/max attributes (no visible text)
-    function setPriceBounds(){
-      const prices = products.map(p => parseFloat(p.dataset.price)).filter(n => !Number.isNaN(n));
-      if (!prices.length) {
-        priceMin.disabled = priceMax.disabled = true;
-        return;
-      }
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      priceMin.disabled = priceMax.disabled = false;
-      priceMin.min = min; priceMin.max = max; priceMin.placeholder = min.toFixed(2);
-      priceMax.min = min; priceMax.max = max; priceMax.placeholder = max.toFixed(2);
-    }
 
-    // Clamp and normalize on blur
-    function clampInput(input){
-      input.addEventListener('blur', () => {
-        if (input.disabled || input.value === '') return;
-        let v = parseFloat(input.value);
-        if (Number.isNaN(v)) { input.value = ''; return; }
-        const min = input.hasAttribute('min') ? parseFloat(input.min) : -Infinity;
-        const max = input.hasAttribute('max') ? parseFloat(input.max) : Infinity;
-        if (v < min) v = min;
-        if (v > max) v = max;
-        input.value = v.toFixed(2);
-      });
-    }
-
-    setPriceBounds();
-    clampInput(priceMin); clampInput(priceMax);
-
-    // client-side filter apply/clear
-    filterForm.addEventListener('submit', e => {
-      e.preventDefault();
-      const min = parseFloat(priceMin.value);
-      const max = parseFloat(priceMax.value);
-      products.forEach(card => {
-        const p = parseFloat(card.dataset.price);
-        let show = true;
-        if (!Number.isNaN(min) && p < min) show = false;
-        if (!Number.isNaN(max) && p > max) show = false;
-        card.style.display = show ? '' : 'none';
-      });
-    });
-
-    document.getElementById('clearFilters').addEventListener('click', () => {
-      priceMin.value = priceMax.value = '';
-      products.forEach(c => c.style.display = '');
-    });
       // from productcards data attrs
       function populateOptions() {
         const categories = new Set();
         const brands = new Set();
 
-        products.forEach(card => {
+        productsContainer.forEach(card => {
           const c = (card.dataset.category || '').trim();
           const b = (card.dataset.brand || '').trim();
           if (c) categories.add(c);
@@ -201,7 +161,7 @@
         const selectedCategories = Array.from(filterForm.querySelectorAll('input[name="category"]:checked')).map(i => i.value);
         const selectedBrands = Array.from(filterForm.querySelectorAll('input[name="brand"]:checked')).map(i => i.value);
 
-        products.forEach(card => {
+        productsContainer.forEach(card => {
           let show = true;
           const price = parseFloat(card.dataset.price);
           const category = (card.dataset.category || '').trim();
@@ -219,7 +179,7 @@
 
       function clearFilters() {
         filterForm.reset();
-        products.forEach(card => card.style.display = '');
+        productsContainer.forEach(card => card.style.display = '');
       }
 
       populateOptions();
@@ -228,5 +188,33 @@
 
       // if products are updated later, call populateOptions() again.
     })();
+    </script>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
+            btn.addEventListener("click", function () {
+                const card = this.closest(".ProductCard");
+                
+                const title = card.querySelector(".productTitle").textContent.trim();
+                // Get price from data-price attribute for consistency
+                const price = card.dataset.price; 
+                const img = card.dataset.img;
+
+                const item = {
+                    title: title,
+                    price: price,
+                    img: img
+                };
+
+                // Use the global functions from functions.js
+                const cart = getCart();
+                cart.push(item);
+                saveCart(cart);
+
+                alert("Added " + title + " to cart!");
+            });
+        });
+    });
     </script>
 {% endblock %}

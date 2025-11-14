@@ -1,4 +1,14 @@
 
+function getCart() {
+    const cart = localStorage.getItem("cart");
+    return cart ? JSON.parse(cart) : [];
+}
+
+function saveCart(cart) {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
+
+
 // event listener for the sort by price button in catalogue.html
 document.addEventListener("DOMContentLoaded", function () {
     const sortBtn = document.getElementById("sortPriceBtn");
@@ -13,7 +23,7 @@ document.addEventListener("DOMContentLoaded", function () {
             cards.sort((a, b) => {
                 const priceA = parseFloat(a.getAttribute("data-price"));
                 const priceB = parseFloat(b.getAttribute("data-price"));
-                return ascending ? priceA - priceB : priceB - priceA;
+                return ascending ? priceA - priceB : priceB - a.priceB;
             });
 
             // Re-append in new order

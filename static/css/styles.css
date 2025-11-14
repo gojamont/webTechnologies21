@@ -89,8 +89,8 @@ nav ul {
     flex: 0.1;
 }
 
-/* icon display */
-#search, #shopping-cart, #menu {
+/* icon display -- THIS IS THE CORRECTED RULE */
+#search, #menu {
     display: none;
 }
 
@@ -185,7 +185,7 @@ footer p {
   #menu {display: block;}
 }
 
-/*  */
+/* */
 @media screen and (max-width: 600px) {
   .topnav.responsive {position: relative;}
   .topnav.responsive a.icon {
