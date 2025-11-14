@@ -1,0 +1,23 @@
+{% extends "index.html" %}
+
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/productPageStyles.css' %}">{% endblock %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block main %}
+<div>
+    <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
+</div>
+<div>
+    <p class="productTitle">{{ product.name }}</p>
+    <strong><p class="productPrice">${{ product.price }}</p></strong>
+    <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
+        Add to Cart
+    </button>
+    <p class="productDescription">{{ product.description }}</p>
+</div>
+<script>
+    // Add shopping cart functionality
+</script>
+{% endblock %}

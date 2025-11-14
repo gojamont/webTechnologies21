@@ -23,5 +23,9 @@ def catalogPage(request):
     products = Product.objects.all()
     return render(request, "CatalogPage.html", {'products': products})
 
+def productPage(request, productId):
+    product = Product.objects.get(id=productId)
+    return render(request, "ProductPage.html", {'product': product})
+
 def cartPage(request):
     return render(request, "CartPage.html");

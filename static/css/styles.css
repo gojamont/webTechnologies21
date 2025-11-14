@@ -169,6 +169,12 @@ footer p {
     display: none;
 }
 
+/* img */
+img {
+    max-width: 100%;
+    max-height: 100%;
+}
+
 /* login & signup buttons*/
 .button {
     border: 1px solid #FFFFFF;

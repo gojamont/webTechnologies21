@@ -23,6 +23,7 @@ urlpatterns = [
     path('', views.index, name="home"),
     path('about', views.about, name="about"),
     path('catalog', views.catalogPage, name="catalog"),
+    path('catalog/<int:productId>', views.productPage, name="product"),
     path('login', views.login, name="login"),
     path('register', views.register, name="register"),
     path('cart', views.cartPage, name="cart")

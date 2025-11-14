@@ -55,18 +55,22 @@
         <div class="ProductsContainer">
             {% for product in products %}
             <div class="ProductCard" 
-                 data-price="{{ product.price }}" 
-                 data-category="{{ product.category|default:'' }}" 
-                 data-brand="{{ product.brand|default:'' }}"
-                 data-img="{{ product.image_url|default:'#' }}">
-                
+                data-price="{{ product.price }}" 
+                data-category="{{ product.category|default:'' }}" 
+                data-brand="{{ product.brand|default:'' }}"
+                data-img="{{ product.image_url|default:'#' }}">
+              
+              <a href="{% url 'product' productId=product.id %}">
                 <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
+              </a>
+              <a href="{% url 'product' productId=product.id %}">
                 <p class="productTitle">{{ product.name }}</p>
-                <strong><p class="productPrice">${{ product.price }}</p></strong>
-                
-                <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
-                    Add to Cart
-                </button>
+              </a>
+              <strong><p class="productPrice">${{ product.price }}</p></strong>
+              
+              <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
+                Add to Cart
+              </button>
             </div>
             {% empty %}
             <p>No products available.</p>
