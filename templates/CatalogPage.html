@@ -55,7 +55,7 @@
         <div class="ProductsContainer">
             {% for product in products %}
             <div class="ProductCard" data-price="{{ product.price }}" data-category="{{ product.category|default:'' }}" data-brand="{{ product.brand|default:'' }}">
-                <img class="ProductImage" src="#" alt="{{ product.name }}">
+      <img class="ProductImage" src="{{ product.image_url }}" alt="{{ product.name }}">
                 <p class="productTitle">{{ product.name }}</p>
                 <strong><p class="productPrice">${{ product.price }}</p></strong>
             </div>

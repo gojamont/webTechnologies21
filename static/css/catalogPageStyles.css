@@ -13,6 +13,12 @@ main {
     align-items: center;
 }
 
+.ProductImage{
+  width: 20vw;
+  height: 20vh;
+  object-fit: contain; /* This prevents distortion */
+}
+
 .ProductCard {
     border-radius: var(--button-border-radius);
     border: 1px solid #D9D9D9;
