@@ -3,7 +3,7 @@
 {% load static %}
 {% block styles %}<link rel="stylesheet" href="{% static 'css/editProductPageStyles.css' %}">{% endblock %}
 
-{% block title %}Edit {{ product.name }}{% endblock %}
+{% block title %}Create product{% endblock %}
 
 {% block main %}
 <form>
@@ -19,10 +19,9 @@
         <input type="number" name="description" value="{{ product.price }}" required>
         <label for="description">Description:</label>
         <textarea name="description">{{ product.description }}</textarea>
-        <input type="submit" value="Save changes">
+        <input type="submit" value="Create product">
     </div>
 </form>
-<button>Delete product</button>
 <script>
 </script>
 {% endblock %}

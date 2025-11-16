@@ -10,10 +10,10 @@ import json
 
 # index page
 def index(request):
-    return render(request, "home.html");
+    return render(request, "home.html")
 
 def about(request):
-    return render(request, "AboutPage.html");
+    return render(request, "AboutPage.html")
 
 # function for authenticating the user
 def login_user(request):
@@ -40,7 +40,7 @@ def login_user(request):
     return render(request, "loginPage.html")
 
 def promoCodePage(request):
-    return render(request, "promoCodePage.html");
+    return render(request, "promoCodePage.html")
 
 # function for registering the user
 def register(request):
@@ -89,5 +89,13 @@ def productPage(request, productId):
     product = Product.objects.get(id=productId)
     return render(request, "ProductPage.html", {'product': product})
 
+def editProductPage(request, productId):
+    product = Product.objects.get(id=productId)
+    return render(request, "editProductPage.html", {'product': product})
+
+def createProductPage(request):
+    product = Product()
+    return render(request, "createProductPage.html", {'product': product})
+
 def cartPage(request):
-    return render(request, "CartPage.html");
+    return render(request, "CartPage.html")
