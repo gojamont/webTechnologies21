@@ -9,7 +9,9 @@
         <form action="/register" class="registerForm" method="post" onsubmit="registerUser(event)">
             {% csrf_token %}
             <h1>Register</h1>
-            {% if error %} <div class="error-message" style="font-size: 0.5rem; color: red;">{{error}}</div> {% endif%}
+
+            <div class="error-message" style="font-size: 0.8rem; color: red; display: none;"></div>
+
             <div class="userInputField">
                 <input type="text" placeholder="First Name" autocomplete="off" name="first_name">
                 <input type="email" placeholder="Email" autocomplete="off" name="email">

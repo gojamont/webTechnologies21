@@ -10,7 +10,7 @@
         <form action="/login" class="loginForm" method="post" onsubmit="loginUser(event)">
             {% csrf_token %}
             <h1>Login</h1>
-            {% if error %} <div class="error-message" style="font-size: 0.5rem; color: red;">{{error}}</div> {% endif%}
+            <div class="error-message" style="font-size: 0.8rem; color: red; display: none;"></div>
             <input type="text" placeholder="Username" name="username">
             <input type="password" placeholder="Password" name="password">
             <div class="formButtonField">

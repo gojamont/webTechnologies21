@@ -21,6 +21,11 @@ function registerUser(e) {
     const email = data_form.email.value;
 
     const csrfToken = data_form.querySelector('[name=csrfmiddlewaretoken]').value;
+    
+    const error_message = document.querySelector('.error-message');
+
+    error_message.textContent = '';
+    error_message.style.display = 'none';
 
     const data = {
         username: username, 
@@ -45,6 +50,10 @@ function registerUser(e) {
             if (data.success) {
                 window.location.href = '/login';
             }
+            else {
+                error_message.textContent = data.message;
+                error_message.style.display = 'block';
+            }
     })
     .catch(error => console.error('Error', error));
 }
@@ -58,6 +67,10 @@ function loginUser(e) {
     const password = form.password.value;
 
     const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+    const error_message = document.querySelector('.error-message');
+
+    error_message.textContent = '';
+    error_message.style.display = 'none';
 
 
     const user_data = {
@@ -79,6 +92,10 @@ function loginUser(e) {
             // showing alert when user is registered successfully
             if (user_data.success) {
                 window.location.href = '/';
+            }
+            else {
+                error_message.textContent = data.message;
+                error_message.style.display = 'block';
             }
     })
     .catch(error => console.error('Error', error));
