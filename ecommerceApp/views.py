@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from .models import Product, User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
 import json
@@ -62,6 +62,10 @@ def register(request):
             return render(request, "registerPage.html", {'error':'Error occurred while trying to register, please try again'})
             
     return render(request, "registerPage.html");
+
+def logout_view(request):
+    logout(request)
+    return redirect('/')
 
 def catalogPage(request):
     products = Product.objects.all()

@@ -25,6 +25,7 @@ urlpatterns = [
     path('catalog', views.catalogPage, name="catalog"),
     path('catalog/<int:productId>', views.productPage, name="product"),
     path('login', views.login_user, name="login"),
+    path('logout', views.logout_view, name="logout"),
     path('register', views.register, name="register"),
     path('cart', views.cartPage, name="cart")
 ]

@@ -36,10 +36,14 @@
                 <ul>
                     <li><input type="search" class="input" id="search"></li>
                     <li><a href="/cart"><i class="fa-solid fa-cart-shopping" id="shopping-cart"></i></a></li>
-                    <li><a class="button" href="/login">Log In</a></li>
-                    <li><a class="button" href="/register">Register</a></li>
-                    <li><a href="#"><i class="fa-solid fa-user" id="user"></i></a></li>
                     <li><a href="#"><i class="fa-solid fa-bars" id="menu"></i></a></li>
+                    {% if not user.is_authenticated %}
+                        <li><a class="button" href="/login">Log In</a></li>
+                        <li><a class="button" href="/register">Register</a></li>
+                    {% elif user.is_authenticated %}
+                        <li><a href="#"><i class="fa-solid fa-user" id="user"></i></a></li>
+                        <li><a href="/logout">Log Out</a></li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
