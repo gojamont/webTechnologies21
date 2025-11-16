@@ -9,6 +9,84 @@ function saveCart(cart) {
 }
 
 
+// function for registering the user
+function registerUser(e) {
+    e.preventDefault();
+
+    const data_form = e.target;
+    const username = data_form.username.value;
+    const password = data_form.password.value;
+    const first_name = data_form.first_name.value;
+    const last_name = data_form.last_name.value;
+    const email = data_form.email.value;
+
+    const csrfToken = data_form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+    const data = {
+        username: username, 
+        password: password, 
+        first_name: first_name,
+        last_name: last_name, 
+        email: email
+    }
+
+    fetch('/register', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json', 
+            'X-CSRFToken' : csrfToken
+        },
+        body: JSON.stringify(data)
+    })
+        .then(response => response.json())
+        .then(data => {
+
+            // showing alert when user is registered successfully
+            if (data.success) {
+                window.location.href = '/login';
+            }
+    })
+    .catch(error => console.error('Error', error));
+}
+
+// function for logging in the user
+function loginUser(e) {
+    e.preventDefault();
+
+    const form = e.target;
+    const username = form.username.value;
+    const password = form.password.value;
+
+    const csrfToken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+
+
+    const user_data = {
+        username: username, 
+        password: password
+    }
+
+    fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/json', 
+            'X-CSRFToken' : csrfToken
+        },
+        body: JSON.stringify(user_data)
+    })
+        .then(response => response.json())
+        .then(user_data => {
+
+            // showing alert when user is registered successfully
+            if (user_data.success) {
+                window.location.href = '/';
+            }
+    })
+    .catch(error => console.error('Error', error));
+
+ }
+
+document.addEventListener("DOMContentLoaded", function(){})
+
 // event listener for the sort by price button in catalogue.html
 document.addEventListener("DOMContentLoaded", function () {
     const sortBtn = document.getElementById("sortPriceBtn");

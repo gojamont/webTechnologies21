@@ -1,6 +1,8 @@
 from django.shortcuts import render,redirect
 from .models import Product, User
 from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
+
 import json
 
 
@@ -28,7 +30,7 @@ def login_user(request):
             
             if user is not None:
                 login(request, user)
-                return redirect("home")
+                return JsonResponse({'success':True, 'message':'User logged in successfully'})
             else:
                 return render(request, "loginPage.html", {'error':'Invalid credentials'})
         except json.JSONDecodeError:
@@ -52,8 +54,10 @@ def register(request):
             last_name = data.get('last_name')
             email = data.get('email')
             
-            user=User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
-            return redirect("register")
+            user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
+            
+            return JsonResponse({'success':True, 'message':'User is registered successfully'})
+            
         except Exception as error:
             return render(request, "registerPage.html", {'error':'Error occurred while trying to register, please try again'})
             

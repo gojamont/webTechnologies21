@@ -6,7 +6,7 @@
 {% block styles %}<link rel="stylesheet" href="{% static 'css/registerPageStyles.css' %}">{% endblock %}
 
 {% block main %}
-        <form action="/register" class="registerForm" method="post">
+        <form action="/register" class="registerForm" method="post" onsubmit="registerUser(event)">
             {% csrf_token %}
             <h1>Register</h1>
             {% if error %} <div class="error-message" style="font-size: 0.5rem; color: red;">{{error}}</div> {% endif%}
