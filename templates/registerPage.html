@@ -7,6 +7,7 @@
 
 {% block main %}
         <form action="/register" class="registerForm" method="post">
+            {% csrf_token %}
             <h1>Register</h1>
             <div class="userInputField">
                 <input type="text" placeholder="First Name" autocomplete="off" name="first_name">
