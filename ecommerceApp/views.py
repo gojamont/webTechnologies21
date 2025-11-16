@@ -1,7 +1,8 @@
 from django.shortcuts import render,redirect
-from .models import Product
+from .models import Product, User
 from django.contrib.auth import authenticate, login
 import json
+
 
 # Create your views here.
 
@@ -41,6 +42,21 @@ def promoCodePage(request):
 
 # function for registering the user
 def register(request):
+    if request.method == "POST":
+        try:
+            # getting all the data from the frontend
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+            first_name = data.get('first_name')
+            last_name = data.get('last_name')
+            email = data.get('email')
+            
+            user=User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
+            return redirect("register")
+        except Exception as error:
+            return render(request, "registerPage.html", {'error':'Error occurred while trying to register, please try again'})
+            
     return render(request, "registerPage.html");
 
 def catalogPage(request):
