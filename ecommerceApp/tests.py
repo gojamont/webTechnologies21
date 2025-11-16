@@ -27,7 +27,7 @@ class SampleTestCase(TestCase):
         request = self.factory.post('/login/', data=json.dumps(payload), content_type='application/json')
         request = self._add_session(request)
         response = login_user(request)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 200)
         # session should contain auth user id after login
         self.assertEqual(request.session.get('_auth_user_id'), str(self.user.pk))
 
@@ -71,5 +71,5 @@ class SampleTestCase(TestCase):
         request = self.factory.post('/register/', data=json.dumps(payload), content_type='application/json')
         request = self._add_session(request)
         response = register(request)
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.status_code, 201)
         self.assertTrue(User.objects.filter(username='newuser').exists())

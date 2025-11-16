@@ -30,13 +30,13 @@ def login_user(request):
             
             if user is not None:
                 login(request, user)
-                return JsonResponse({'success':True, 'message':'User logged in successfully'})
+                return JsonResponse({'success': True, 'message':'User logged in successfully'})
             else:
-                return render(request, "loginPage.html", {'error':'Invalid credentials'})
+                return JsonResponse({'success': False, 'message':'Invalid credentials'})
         except json.JSONDecodeError:
-                return render(request, "loginPage.html", {'error':'Invalid request'})
+                return JsonResponse({'success': False, 'message':'Invalid request'})
         except Exception as error:
-                return render(request, "loginPage.html", {'error':'Error occurred while trying to login a user, please try again'})
+                return JsonResponse({'success': False, 'message':f'An error occurred:{error}'})
     return render(request, "loginPage.html")
 
 def promoCodePage(request):
@@ -54,12 +54,26 @@ def register(request):
             last_name = data.get('last_name')
             email = data.get('email')
             
+            # error handling
+            if not username or not password or not email:
+                return JsonResponse({'success': False, 'message':'Username, password or email does not exist'})
+            
+            if User.objects.filter(username=username).exists():
+                return JsonResponse({'success':False, 'message':'Username already exists'}, status=400)
+            
+            if User.objects.filter(email=email).exists():
+                return JsonResponse({'success':False, 'message':'Email already exists'}, status=400)
+            
+            # saving user in the data base
             user = User.objects.create_user(username=username, password=password, first_name=first_name, last_name=last_name, email=email)
             
-            return JsonResponse({'success':True, 'message':'User is registered successfully'})
+            return JsonResponse({'success':True, 'message':'User is registered successfully'}, status=201)
+        
+        except json.JSONDecodeError:
+            return JsonResponse({'success': False, 'message': 'Invalid data'}, status=400)
             
         except Exception as error:
-            return render(request, "registerPage.html", {'error':'Error occurred while trying to register, please try again'})
+            return JsonResponse({'success':False, 'message': f'An error occurred: {error}'},  status=500)
             
     return render(request, "registerPage.html");
 
