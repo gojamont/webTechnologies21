@@ -24,19 +24,19 @@ def login_user(request):
             password = data.get('password')
             
             if not username or not password:
-                return render(request, "loginPage.html", {'error':'Username or password is required'})
+                return JsonResponse({'success': False, 'message':'Username or password is required'}, status=400)
             
             user = authenticate(request, username=username, password=password)
             
             if user is not None:
                 login(request, user)
-                return JsonResponse({'success': True, 'message':'User logged in successfully'})
+                return JsonResponse({'success': True, 'message':'User logged in successfully'}, status=200)
             else:
-                return JsonResponse({'success': False, 'message':'Invalid credentials'})
+                return JsonResponse({'success': False, 'message':'Invalid credentials'}, status=401)
         except json.JSONDecodeError:
-                return JsonResponse({'success': False, 'message':'Invalid request'})
+                return JsonResponse({'success': False, 'message':'Invalid request'}, status=400)
         except Exception as error:
-                return JsonResponse({'success': False, 'message':f'An error occurred:{error}'})
+                return JsonResponse({'success': False, 'message':f'An error occurred: {error}'}, status=500)
     return render(request, "loginPage.html")
 
 def promoCodePage(request):
@@ -56,7 +56,7 @@ def register(request):
             
             # error handling
             if not username or not password or not email:
-                return JsonResponse({'success': False, 'message':'Username, password or email does not exist'})
+                return JsonResponse({'success': False, 'message':'Username, password or email does not exist'}, status=400)
             
             if User.objects.filter(username=username).exists():
                 return JsonResponse({'success':False, 'message':'Username already exists'}, status=400)
@@ -73,7 +73,7 @@ def register(request):
             return JsonResponse({'success': False, 'message': 'Invalid data'}, status=400)
             
         except Exception as error:
-            return JsonResponse({'success':False, 'message': f'An error occurred: {error}'},  status=500)
+            return JsonResponse({'success':False, 'message': f'An error occurred: {error}'}, status=500)
             
     return render(request, "registerPage.html");
 

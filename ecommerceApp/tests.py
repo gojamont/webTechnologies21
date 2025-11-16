@@ -36,7 +36,7 @@ class SampleTestCase(TestCase):
         request = self.factory.post('/login/', data=json.dumps(payload), content_type='application/json')
         request = self._add_session(request)
         response = login_user(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         content = response.content.decode()
         self.assertIn('Username or password is required', content)
 
@@ -45,14 +45,14 @@ class SampleTestCase(TestCase):
         request = self.factory.post('/login/', data=json.dumps(payload), content_type='application/json')
         request = self._add_session(request)
         response = login_user(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 401)
         self.assertIn('Invalid credentials', response.content.decode())
 
     def test_login_bad_json(self):
         request = self.factory.post('/login/', data='not-a-json', content_type='application/json')
         request = self._add_session(request)
         response = login_user(request)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 400)
         self.assertIn('Invalid request', response.content.decode())
 
     def test_promocode_page_get(self):
