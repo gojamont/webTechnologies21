@@ -152,3 +152,12 @@ def edit_product(request, product_id):
         "product": product,
         "categories": categories,
     })
+
+def delete_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+
+    if request.method == "POST":
+        product.delete()
+        return redirect("catalog") 
+
+    return redirect("edit_product", product_id=product.id)
