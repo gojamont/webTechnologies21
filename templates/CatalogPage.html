@@ -1,224 +1,231 @@
 {% extends "index.html" %}
 
 {% load static %}
-{% block styles %}<link rel="stylesheet" href="{% static 'css/catalogPageStyles.css' %}">{% endblock %}
+{% block styles %}
+<link rel="stylesheet" href="{% static 'css/catalogPageStyles.css' %}">{% endblock %}
 
 {% block title %}Catalog{% endblock %}
 
 {% block main %}
-  <section class="productSideBar">
-        <div class="leftFilterBar">
-            <div class="filter-dropdown">
-                <button id="filterToggle" aria-haspopup="true" aria-expanded="false">Filter</button>
-                <div class="filter-menu" id="filterMenu" hidden>
-                    <form id="filterForm">
-                        <fieldset class="filter-group">
-                            <legend>Price</legend>
-                            <label>
-                                Min:
-                                <input type="number" name="price_min" id="priceMin" min="0" step="0.01" placeholder="0">
-                            </label>
-                            <label>
-                                Max:
-                                <input type="number" name="price_max" id="priceMax" min="0" step="0.01" placeholder="1000">
-                            </label>
-                        </fieldset>
+<section class="productSideBar">
+  <div class="leftFilterBar">
+    <div class="filter-dropdown">
+      <button id="filterToggle" aria-haspopup="true" aria-expanded="false">Filter</button>
+      <div class="filter-menu" id="filterMenu" hidden>
+        <form id="filterForm">
+          <fieldset class="filter-group">
+            <legend>Price</legend>
+            <label>
+              Min:
+              <input type="number" name="price_min" id="priceMin" min="0" step="0.01" placeholder="0">
+            </label>
+            <label>
+              Max:
+              <input type="number" name="price_max" id="priceMax" min="0" step="0.01" placeholder="1000">
+            </label>
+          </fieldset>
 
-                        <fieldset class="filter-group">
-                            <legend>Category</legend>
-                            <div id="categoryOptions">
-                                <p class="placeholder">No categories available</p>
-                            </div>
-                        </fieldset>
-
-                        <fieldset class="filter-group">
-                            <legend>Brand</legend>
-                            <div id="brandOptions">
-                                <p class="placeholder">No brands available</p>
-                            </div>
-                        </fieldset>
-
-                        <div class="filter-actions">
-                            <button type="submit" id="applyFilters">Apply</button>
-                            <button type="button" id="clearFilters">Clear</button>
-                        </div>
-                    </form>
-                </div>
+          <fieldset class="filter-group">
+            <legend>Category</legend>
+            <div id="categoryOptions">
+              <p class="placeholder">No categories available</p>
             </div>
+          </fieldset>
 
-            <button id="sortPriceBtn">Order By Price</button>
-        </div>
-    </section>
-
-      <section class="productSection">
-        <h1>Products</h1>
-        <div class="ProductsContainer">
-            {% for product in products %}
-            <div class="ProductCard" 
-                data-price="{{ product.price }}" 
-                data-category="{{ product.category|default:'' }}" 
-                data-brand="{{ product.brand|default:'' }}"
-                data-img="{{ product.image_url|default:'#' }}">
-              
-              <a href="{% url 'product' productId=product.id %}">
-                <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
-              </a>
-              <a href="{% url 'product' productId=product.id %}">
-                <p class="productTitle">{{ product.name }}</p>
-              </a>
-              <strong><p class="productPrice">${{ product.price }}</p></strong>
-              
-              <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
-                Add to Cart
-              </button>
+          <fieldset class="filter-group">
+            <legend>Brand</legend>
+            <div id="brandOptions">
+              <p class="placeholder">No brands available</p>
             </div>
-            {% empty %}
-            <p>No products available.</p>
-            {% endfor %}
-        </div>
-    </section>
+          </fieldset>
 
-    <script>
-    (function() {
-      // ... (existing filter/sort code remains unchanged) ...
+          <div class="filter-actions">
+            <button type="submit" id="applyFilters">Apply</button>
+            <button type="button" id="clearFilters">Clear</button>
+          </div>
+        </form>
+      </div>
+    </div>
 
-      const filterToggle = document.getElementById('filterToggle');
-      const filterMenu = document.getElementById('filterMenu');
-      const filterForm = document.getElementById('filterForm');
-      const categoryOptions = document.getElementById('categoryOptions');
-      const brandOptions = document.getElementById('brandOptions');
-      const productsContainer = document.querySelectorAll('.ProductCard');
+    <button id="sortPriceBtn">Order By Price</button>
+  </div>
+</section>
 
-      function toggleFilterMenu() {
-        const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
-        filterToggle.setAttribute('aria-expanded', String(!expanded));
-        if (expanded) {
-          filterMenu.hidden = true;
-        } else {
-          filterMenu.hidden = false;
-        }
-      }
+<section class="productSection">
+  <h1>Products</h1>
 
-      filterToggle.addEventListener('click', function(e) {
-        e.stopPropagation();
-        toggleFilterMenu();
-      });
+  <a href="{% url 'add_product' %}" style="display:inline-block; margin-bottom:1em; padding:0.5em 1em; 
+          background:green; color:white; border-radius:5px; text-decoration:none;">
+    + Add Product
+  </a>
 
-      //close dropdown when clicking outside
-      document.addEventListener('click', function() {
-        filterToggle.setAttribute('aria-expanded', 'false');
+  <div class="ProductsContainer">
+    {% for product in products %}
+    <div class="ProductCard" data-price="{{ product.price }}" data-category="{{ product.category|default:'' }}"
+      data-brand="{{ product.brand|default:'' }}" data-img="{{ product.image_url|default:'#' }}">
+
+      <a href="{% url 'product' productId=product.id %}">
+        <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
+      </a>
+      <a href="{% url 'product' productId=product.id %}">
+        <p class="productTitle">{{ product.name }}</p>
+      </a>
+      <strong>
+        <p class="productPrice">${{ product.price }}</p>
+      </strong>
+
+      <button class="add-to-cart-btn"
+        style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
+        Add to Cart
+      </button>
+    </div>
+    {% empty %}
+    <p>No products available.</p>
+    {% endfor %}
+  </div>
+</section>
+
+<script>
+  (function () {
+    // ... (existing filter/sort code remains unchanged) ...
+
+    const filterToggle = document.getElementById('filterToggle');
+    const filterMenu = document.getElementById('filterMenu');
+    const filterForm = document.getElementById('filterForm');
+    const categoryOptions = document.getElementById('categoryOptions');
+    const brandOptions = document.getElementById('brandOptions');
+    const productsContainer = document.querySelectorAll('.ProductCard');
+
+    function toggleFilterMenu() {
+      const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
+      filterToggle.setAttribute('aria-expanded', String(!expanded));
+      if (expanded) {
         filterMenu.hidden = true;
-      });
-
-      filterMenu.addEventListener('click', function(e) {
-        e.stopPropagation();
-      });
-
-      // from productcards data attrs
-      function populateOptions() {
-        const categories = new Set();
-        const brands = new Set();
-
-        productsContainer.forEach(card => {
-          const c = (card.dataset.category || '').trim();
-          const b = (card.dataset.brand || '').trim();
-          if (c) categories.add(c);
-          if (b) brands.add(b);
-        });
-
-        function buildCheckboxList(container, items, namePrefix) {
-          container.innerHTML = '';
-          if (items.size === 0) {
-            const p = document.createElement('p');
-            p.className = 'placeholder';
-            p.textContent = 'No options available';
-            container.appendChild(p);
-            return;
-          }
-          Array.from(items).sort().forEach((val, idx) => {
-            const id = `${namePrefix}_${idx}`;
-            const label = document.createElement('label');
-            label.setAttribute('for', id);
-            const input = document.createElement('input');
-            input.type = 'checkbox';
-            input.name = namePrefix;
-            input.value = val;
-            input.id = id;
-            label.appendChild(input);
-            label.appendChild(document.createTextNode(' ' + val));
-            container.appendChild(label);
-            container.appendChild(document.createElement('br'));
-          });
-        }
-
-        buildCheckboxList(categoryOptions, categories, 'category');
-        buildCheckboxList(brandOptions, brands, 'brand');
+      } else {
+        filterMenu.hidden = false;
       }
+    }
 
-      // client-side
-      function applyFilters(e) {
-        if (e) e.preventDefault();
-
-        const priceMin = parseFloat(document.getElementById('priceMin').value);
-        const priceMax = parseFloat(document.getElementById('priceMax').value);
-
-        const selectedCategories = Array.from(filterForm.querySelectorAll('input[name="category"]:checked')).map(i => i.value);
-        const selectedBrands = Array.from(filterForm.querySelectorAll('input[name="brand"]:checked')).map(i => i.value);
-
-        productsContainer.forEach(card => {
-          let show = true;
-          const price = parseFloat(card.dataset.price);
-          const category = (card.dataset.category || '').trim();
-          const brand = (card.dataset.brand || '').trim();
-
-          if (!Number.isNaN(priceMin) && price < priceMin) show = false;
-          if (!Number.isNaN(priceMax) && price > priceMax) show = false;
-
-          if (selectedCategories.length > 0 && !selectedCategories.includes(category)) show = false;
-          if (selectedBrands.length > 0 && !selectedBrands.includes(brand)) show = false;
-
-          card.style.display = show ? '' : 'none';
-        });
-      }
-
-      function clearFilters() {
-        filterForm.reset();
-        productsContainer.forEach(card => card.style.display = '');
-      }
-
-      populateOptions();
-      filterForm.addEventListener('submit', applyFilters);
-      document.getElementById('clearFilters').addEventListener('click', clearFilters);
-
-      // if products are updated later, call populateOptions() again.
-    })();
-    </script>
-
-    <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-            btn.addEventListener("click", function () {
-                const card = this.closest(".ProductCard");
-                
-                const title = card.querySelector(".productTitle").textContent.trim();
-                // Get price from data-price attribute for consistency
-                const price = card.dataset.price; 
-                const img = card.dataset.img;
-
-                const item = {
-                    title: title,
-                    price: price,
-                    img: img
-                };
-
-                // Use the global functions from functions.js
-                const cart = getCart();
-                cart.push(item);
-                saveCart(cart);
-
-                alert("Added " + title + " to cart!");
-            });
-        });
+    filterToggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      toggleFilterMenu();
     });
-    </script>
+
+    //close dropdown when clicking outside
+    document.addEventListener('click', function () {
+      filterToggle.setAttribute('aria-expanded', 'false');
+      filterMenu.hidden = true;
+    });
+
+    filterMenu.addEventListener('click', function (e) {
+      e.stopPropagation();
+    });
+
+    // from productcards data attrs
+    function populateOptions() {
+      const categories = new Set();
+      const brands = new Set();
+
+      productsContainer.forEach(card => {
+        const c = (card.dataset.category || '').trim();
+        const b = (card.dataset.brand || '').trim();
+        if (c) categories.add(c);
+        if (b) brands.add(b);
+      });
+
+      function buildCheckboxList(container, items, namePrefix) {
+        container.innerHTML = '';
+        if (items.size === 0) {
+          const p = document.createElement('p');
+          p.className = 'placeholder';
+          p.textContent = 'No options available';
+          container.appendChild(p);
+          return;
+        }
+        Array.from(items).sort().forEach((val, idx) => {
+          const id = `${namePrefix}_${idx}`;
+          const label = document.createElement('label');
+          label.setAttribute('for', id);
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.name = namePrefix;
+          input.value = val;
+          input.id = id;
+          label.appendChild(input);
+          label.appendChild(document.createTextNode(' ' + val));
+          container.appendChild(label);
+          container.appendChild(document.createElement('br'));
+        });
+      }
+
+      buildCheckboxList(categoryOptions, categories, 'category');
+      buildCheckboxList(brandOptions, brands, 'brand');
+    }
+
+    // client-side
+    function applyFilters(e) {
+      if (e) e.preventDefault();
+
+      const priceMin = parseFloat(document.getElementById('priceMin').value);
+      const priceMax = parseFloat(document.getElementById('priceMax').value);
+
+      const selectedCategories = Array.from(filterForm.querySelectorAll('input[name="category"]:checked')).map(i => i.value);
+      const selectedBrands = Array.from(filterForm.querySelectorAll('input[name="brand"]:checked')).map(i => i.value);
+
+      productsContainer.forEach(card => {
+        let show = true;
+        const price = parseFloat(card.dataset.price);
+        const category = (card.dataset.category || '').trim();
+        const brand = (card.dataset.brand || '').trim();
+
+        if (!Number.isNaN(priceMin) && price < priceMin) show = false;
+        if (!Number.isNaN(priceMax) && price > priceMax) show = false;
+
+        if (selectedCategories.length > 0 && !selectedCategories.includes(category)) show = false;
+        if (selectedBrands.length > 0 && !selectedBrands.includes(brand)) show = false;
+
+        card.style.display = show ? '' : 'none';
+      });
+    }
+
+    function clearFilters() {
+      filterForm.reset();
+      productsContainer.forEach(card => card.style.display = '');
+    }
+
+    populateOptions();
+    filterForm.addEventListener('submit', applyFilters);
+    document.getElementById('clearFilters').addEventListener('click', clearFilters);
+
+    // if products are updated later, call populateOptions() again.
+  })();
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const card = this.closest(".ProductCard");
+
+        const title = card.querySelector(".productTitle").textContent.trim();
+        // Get price from data-price attribute for consistency
+        const price = card.dataset.price;
+        const img = card.dataset.img;
+
+        const item = {
+          title: title,
+          price: price,
+          img: img
+        };
+
+        // Use the global functions from functions.js
+        const cart = getCart();
+        cart.push(item);
+        saveCart(cart);
+
+        alert("Added " + title + " to cart!");
+      });
+    });
+  });
+</script>
 {% endblock %}

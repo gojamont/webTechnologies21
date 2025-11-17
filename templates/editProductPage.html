@@ -6,7 +6,7 @@
 {% block title %}Edit {{ product.name }}{% endblock %}
 
 {% block main %}
-<form>
+<form method="post">
     <div>
         <label for="image_url">Image URL:</label>
         <input type="url" name="image_url" value="{{ product.image_url }}" required>

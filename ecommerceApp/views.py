@@ -1,5 +1,5 @@
-from django.shortcuts import render,redirect
-from .models import Product, User
+from django.shortcuts import render,redirect, get_object_or_404
+from .models import Product, User, Category
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 
@@ -93,9 +93,31 @@ def editProductPage(request, productId):
     product = Product.objects.get(id=productId)
     return render(request, "editProductPage.html", {'product': product})
 
-def createProductPage(request):
-    product = Product()
-    return render(request, "createProductPage.html", {'product': product})
-
 def cartPage(request):
     return render(request, "CartPage.html")
+
+def add_product(request):
+    if request.method == "POST":
+       
+        category_obj = None
+        category_id = request.POST.get("category")
+        if category_id:
+            category_obj = get_object_or_404(Category, id=category_id)
+
+       
+        Product.objects.create(
+            name=request.POST["name"],
+            description=request.POST.get("description", ""),
+            price=request.POST["price"],
+            stock=request.POST.get("stock", 0) or 0,
+            category=category_obj,
+            image_url=request.POST.get("image_url") or None,
+        )
+
+        return redirect("catalog")
+
+    
+    categories = Category.objects.all()
+    return render(request, "createProductPage.html", {
+        "categories": categories
+    })

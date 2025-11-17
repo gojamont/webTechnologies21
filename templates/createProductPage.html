@@ -6,10 +6,10 @@
 {% block title %}Create product{% endblock %}
 
 {% block main %}
-<form>
+<form method="post"> 
     <div>
         <label for="image_url">Image URL:</label>
-        <input type="url" name="image_url" value="{{ product.image_url }}" required>
+        <input type="url" name="image_url" value="{{ product.image_url|default_if_none:'' }} " required>
         <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
     </div>
     <div class="detailsDiv">
