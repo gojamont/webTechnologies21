@@ -125,3 +125,30 @@ def add_product(request):
     return render(request, "createProductPage.html", {
         "categories": categories
     })
+
+
+def edit_product(request, product_id):
+    product = get_object_or_404(Product, id=product_id)
+    categories = Category.objects.all()
+
+    if request.method == "POST":
+        print("POST DATA:", request.POST) 
+
+        category_obj = None
+        category_id = request.POST.get("category")
+        if category_id:
+            category_obj = get_object_or_404(Category, id=category_id)
+
+        product.name = request.POST.get("name", product.name)
+        product.price = request.POST.get("price", product.price)
+        product.description = request.POST.get("description", product.description)
+        product.image_url = request.POST.get("image_url", product.image_url)
+        product.category = category_obj
+
+        product.save()
+        return redirect("catalog")
+
+    return render(request, "editProductPage.html", {
+        "product": product,
+        "categories": categories,
+    })

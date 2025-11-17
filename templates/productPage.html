@@ -16,6 +16,12 @@
         Add to Cart
     </button>
     <p class="productDescription">{{ product.description }}</p>
+    <a href="{% url 'edit_product' product.id %}"
+   style="display:inline-block; margin-top:0.5em; padding:0.3em 0.7em;
+          background:#1976d2; color:white; border-radius:4px; text-decoration:none;">
+    Edit
+</a>
+
 </div>
 <script>
     // Add shopping cart functionality
