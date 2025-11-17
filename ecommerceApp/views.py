@@ -93,6 +93,10 @@ def editProductPage(request, productId):
     product = Product.objects.get(id=productId)
     return render(request, "editProductPage.html", {'product': product})
 
+def createProductPage(request):
+    product = Product()
+    return render(request, "createProductPage.html", {'product': product})
+
 def cartPage(request):
     return render(request, "CartPage.html")
 

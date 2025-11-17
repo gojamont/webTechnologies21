@@ -7,6 +7,9 @@
 
 {% block main %}
 <form method="post"> 
+
+        {% csrf_token %}
+
     <div>
         <label for="image_url">Image URL:</label>
         <input type="url" name="image_url" value="{{ product.image_url|default_if_none:'' }} " required>
@@ -16,7 +19,7 @@
         <label for="name">Name:</label>
         <input type="text" name="name" value="{{ product.name }}" required>
         <label for="price">Price:</label>
-        <input type="number" name="description" value="{{ product.price }}" required>
+        <input type="number" name="price" value="{{ product.price }}" required>
         <label for="description">Description:</label>
         <textarea name="description">{{ product.description }}</textarea>
         <input type="submit" value="Create product">
