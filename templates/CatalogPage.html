@@ -54,10 +54,13 @@
 <section class="productSection">
   <h1>Products</h1>
 
-  <a href="{% url 'add_product' %}" style="display:inline-block; margin-bottom:1em; padding:0.5em 1em; 
-          background:green; color:white; border-radius:5px; text-decoration:none;">
-    + Add Product
-  </a>
+    {% if request.user.is_authenticated and request.user.is_staff %}
+        <a href="{% url 'add_product' %}" 
+           style="display:inline-block; margin-bottom:1em; padding:0.5em 1em; 
+                  background:green; color:white; border-radius:5px; text-decoration:none;">
+            + Add Product
+        </a>
+    {% endif %}
 
   <div class="ProductsContainer">
     {% for product in products %}

@@ -2,8 +2,13 @@ from django.shortcuts import render,redirect, get_object_or_404
 from .models import Product, User, Category
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.contrib.auth.decorators import user_passes_test
+
 
 import json
+
+def is_admin(user):
+    return user.is_authenticated and user.is_staff 
 
 
 # Create your views here.
@@ -89,10 +94,12 @@ def productPage(request, productId):
     product = Product.objects.get(id=productId)
     return render(request, "ProductPage.html", {'product': product})
 
+@user_passes_test(is_admin, login_url="login")
 def editProductPage(request, productId):
     product = Product.objects.get(id=productId)
     return render(request, "editProductPage.html", {'product': product})
 
+@user_passes_test(is_admin, login_url="login")
 def createProductPage(request):
     product = Product()
     return render(request, "createProductPage.html", {'product': product})
@@ -100,6 +107,7 @@ def createProductPage(request):
 def cartPage(request):
     return render(request, "CartPage.html")
 
+@user_passes_test(is_admin, login_url="login")
 def add_product(request):
     if request.method == "POST":
        
@@ -126,7 +134,7 @@ def add_product(request):
         "categories": categories
     })
 
-
+@user_passes_test(is_admin, login_url="login")
 def edit_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     categories = Category.objects.all()
@@ -153,6 +161,7 @@ def edit_product(request, product_id):
         "categories": categories,
     })
 
+@user_passes_test(is_admin, login_url="login")
 def delete_product(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
