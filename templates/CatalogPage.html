@@ -95,6 +95,9 @@
     const categoryOptions = document.getElementById('categoryOptions');
     const brandOptions = document.getElementById('brandOptions');
     const productsContainer = document.querySelectorAll('.ProductCard');
+    const priceMinEl = document.getElementById('priceMin');
+    const priceMaxEl = document.getElementById('priceMax');
+    const products = Array.from(document.querySelectorAll('.ProductCard') || []);
 
     function toggleFilterMenu() {
       const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
@@ -193,9 +196,52 @@
       productsContainer.forEach(card => card.style.display = '');
     }
 
-    populateOptions();
-    filterForm.addEventListener('submit', applyFilters);
-    document.getElementById('clearFilters').addEventListener('click', clearFilters);
+    function setPriceBounds() {
+      const prices = products
+        .map(card => parseFloat(card.dataset.price))
+        .filter(n => !Number.isNaN(n));
+      if (!prices.length) {
+        if (priceMinEl) priceMinEl.disabled = true;
+        if (priceMaxEl) priceMaxEl.disabled = true;
+        return;
+      }
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+
+      if (priceMinEl) {
+        priceMinEl.disabled = false;
+        priceMinEl.min = min;
+        priceMinEl.max = max;
+        priceMinEl.placeholder = min.toFixed(2);
+      }
+      if (priceMaxEl) {
+        priceMaxEl.disabled = false;
+        priceMaxEl.min = min;
+        priceMaxEl.max = max;
+        priceMaxEl.placeholder = max.toFixed(2);
+      }
+    }
+
+    function clampOnBlur(input) {
+      if (!input) return;
+      input.addEventListener('blur', () => {
+        if (input.disabled || input.value === '') return;
+        let v = parseFloat(input.value);
+        if (Number.isNaN(v)) { input.value = ''; return; }
+        const min = input.hasAttribute('min') ? parseFloat(input.min) : -Infinity;
+        const max = input.hasAttribute('max') ? parseFloat(input.max) : Infinity;
+        if (v < min) v = min;
+        if (v > max) v = max;
+        input.value = v.toFixed(2);
+      });
+    }
+
+    setPriceBounds();
+    clampOnBlur(priceMinEl);
+    clampOnBlur(priceMaxEl);
+      populateOptions();
+      filterForm.addEventListener('submit', applyFilters);
+      document.getElementById('clearFilters').addEventListener('click', clearFilters);
 
     // if products are updated later, call populateOptions() again.
   })();
