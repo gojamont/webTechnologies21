@@ -7,6 +7,9 @@
 {% block title %}Catalog{% endblock %}
 
 {% block main %}
+{% csrf_token %}
+<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+
 <section class="productSideBar">
   <div class="leftFilterBar">
     <div class="filter-dropdown">
@@ -65,7 +68,7 @@
   <div class="ProductsContainer">
     {% for product in products %}
     <div class="ProductCard" data-price="{{ product.price }}" data-category="{{ product.category|default:'' }}"
-      data-brand="{{ product.brand|default:'' }}" data-img="{{ product.image_url|default:'#' }}">
+      data-brand="{{ product.brand|default:'' }}" data-img="{{ product.image_url|default:'#' }}" data-id="{{ product.id }}">
 
       <a href="{% url 'product' productId=product.id %}">
         <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
@@ -255,12 +258,14 @@
     document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
       btn.addEventListener("click", function () {
         const card = this.closest(".ProductCard");
-
+        const productId = card.dataset.id; 
         const title = card.querySelector(".productTitle").textContent.trim();
-        // Get price from data-price attribute for consistency
+        // Get the token we added to the top of the body
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        // 1. Keep existing LocalStorage logic for UI feedback
         const price = card.dataset.price;
         const img = card.dataset.img;
-
         const item = {
           title: title,
           price: price,
@@ -271,6 +276,24 @@
         const cart = getCart();
         cart.push(item);
         saveCart(cart);
+
+        // 2. New AJAX Call
+        fetch('/api/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken
+            },
+            body: JSON.stringify({ 'product_id': productId })
+        })
+        .then(response => {
+            if (response.ok) {
+                console.log("Saved to database!");
+            } else {
+                console.log("User not logged in or error occurred.");
+            }
+        })
+        .catch(err => console.error(err));
 
         alert("Added " + title + " to cart!");
       });

@@ -6,15 +6,25 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block main %}
+{% csrf_token %}
+<input type="hidden" id="csrf_token" value="{{ csrf_token }}">
+
 <div>
     <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
 </div>
 <div class="detailsDiv">
     <p class="productTitle">{{ product.name }}</p>
     <strong><p class="productPrice">${{ product.price }}</p></strong>
-    <button class="add-to-cart-btn" style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
+    
+    <button class="add-to-cart-btn" 
+            data-id="{{ product.id }}"
+            data-title="{{ product.name }}"
+            data-price="{{ product.price }}"
+            data-img="{{ product.image_url|default:'#' }}"
+            style="padding:0.5em 1em; background:black; color:white; border:none; border-radius:5px; cursor:pointer; margin-top:1em;">
         Add to Cart
     </button>
+    
     <p class="productDescription">{{ product.description }}</p>
     
 {% if request.user.is_authenticated and request.user.is_staff %}
@@ -26,7 +36,53 @@
 {% endif %}
 
 </div>
+
 <script>
-    // Add shopping cart functionality
+    document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.querySelector(".add-to-cart-btn");
+        
+        if (btn) {
+            btn.addEventListener("click", function () {
+                // Retrieve data directly from the button's attributes
+                const productId = this.getAttribute('data-id');
+                const title = this.getAttribute('data-title');
+                const price = this.getAttribute('data-price');
+                const img = this.getAttribute('data-img');
+                
+                
+                const csrfToken = document.getElementById('csrf_token').value;
+
+             
+                const item = {
+                    title: title,
+                    price: price,
+                    img: img
+                };
+                const cart = getCart();
+                cart.push(item);
+                saveCart(cart);
+
+                
+                fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ 'product_id': productId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Saved to database!");
+                    } else {
+                        console.log("User not logged in or error occurred.");
+                    }
+                })
+                .catch(err => console.error(err));
+
+                alert("Added " + title + " to cart!");
+            });
+        }
+    });
 </script>
 {% endblock %}
