@@ -1,7 +1,9 @@
 from django.shortcuts import render,redirect, get_object_or_404
-from .models import Product, User, Category
+from .models import Product, User, Category, Order, OrderItem
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 import json
 
@@ -161,3 +163,34 @@ def delete_product(request, product_id):
         return redirect("catalog") 
 
     return redirect("edit_product", product_id=product.id)
+
+@login_required
+@require_POST
+def add_to_cart_api(request):
+    try:
+        data = json.loads(request.body)
+        product_id = data.get('product_id')
+        
+        product = Product.objects.get(id=product_id)
+        
+        # Get or create a pending order for this user
+        order, created = Order.objects.get_or_create(
+            user=request.user,
+            status='PENDING'
+        )
+        
+        
+        order_item, item_created = OrderItem.objects.get_or_create(
+            order=order,
+            product=product,
+            defaults={'price_at_purchase': product.price}
+        )
+        
+        if not item_created:
+            order_item.quantity += 1
+            order_item.save()
+            
+        return JsonResponse({'success': True, 'message': 'Item added to persistent cart'})
+        
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)}, status=400)
