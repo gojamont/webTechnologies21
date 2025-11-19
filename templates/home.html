@@ -8,30 +8,36 @@
 
 {% block main %}
 <div class="backgroundImage">
-    <button id="discoverBtn"> Discover our new deals</button>
+    <a class="discoverBtn" href="/catalog">Discover our new deals</a>
 </div>
 <div class="category-gallery">
     <section>
         <h2> Shop by Category </h2>
         <div class="category-grid">
+            <a href="/catalog?category=office">
             <div class="category-card">
                 <div class="category-card-overlay"> Office </div>
                     <div class="category-card-background-container">
                         <img src="{% static 'images/officeCardImage.jpg' %}" alt="image1" class="categoryBackgroundImage">
                     </div>
             </div>
+            </a>
+            <a href="/catalog?category=gaming">
             <div class="category-card">
                 <div class="category-card-overlay"> Gaming </div>
                 <div class="category-card-background-container">
                     <img src="{% static 'images/gamingCardImage.jpg' %}" alt="image2" class="categoryBackgroundImage">
                 </div>
             </div>
+            </a>
+            <a href="/catalog?category=study">
             <div class="category-card">
                 <div class="category-card-overlay"> Study </div>
                     <div class="category-card-background-container">
                         <img src="{% static 'images/studyCardImage.jpg' %}" alt="image3" class="categoryBackgroundImage">
                     </div>
             </div>
+            </a>
         </div>
     </section>
 </div>

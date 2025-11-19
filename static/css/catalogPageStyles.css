@@ -35,10 +35,9 @@ main {
 */
 .ProductImage {
     width: 100%;
-    height: 150px;
+    aspect-ratio: 4/3;
     object-fit: cover;
     border-radius: 12px;
-    margin-bottom: 0.5em;
 }
 
 
@@ -50,28 +49,33 @@ main {
     flex: 0.2;
     border: 1px solid #C0C0C0;
     background-color: rgba(217, 217, 217, 0.24);
-    
-    /* ADDED: Ensure sidebar is tall enough */
     min-height: 100vh;
+    padding: 1em;
 }
 
 .productSection {
     flex: 0.8;
-    margin: 1em;
+    margin: 0 1em 1em 1em;
+    gap: 1em;
 }
 
 .leftFilterBar {
     display: flex;
-    position: relative;
     flex-direction: column;
-    width: 80%;
-    margin:auto;
-    gap: 1em;
-    top: 20%;
+    gap: 2em;
 }
 
 .leftFilterBar button {
-    height: 60px;
+    padding: 1rem;
     border-radius: 6px;
     border: 1px solid #C0C0C0;
+}
+
+.filter-group {
+    margin: 1em 0;
+}
+
+.filter-actions {
+    display: flex;
+    justify-content: space-between;
 }
