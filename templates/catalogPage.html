@@ -94,6 +94,9 @@
 <script>
   (function () {
     // ... (existing filter/sort code remains unchanged) ...
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const category = urlParams.get('category')
 
     const filterToggle = document.getElementById('filterToggle');
     const filterMenu = document.getElementById('filterMenu');
@@ -133,6 +136,7 @@
     // from productcards data attrs
     function populateOptions() {
       const categories = new Set();
+
       const brands = new Set();
 
       productsContainer.forEach(card => {
@@ -158,6 +162,7 @@
           const input = document.createElement('input');
           input.type = 'checkbox';
           input.name = namePrefix;
+          input.checked = (namePrefix === 'category' && val.toLowerCase() === category);
           input.value = val;
           input.id = id;
           label.appendChild(input);
@@ -168,6 +173,7 @@
       }
 
       buildCheckboxList(categoryOptions, categories, 'category');
+      console.log(categories);
       buildCheckboxList(brandOptions, brands, 'brand');
     }
 
@@ -248,6 +254,11 @@
       populateOptions();
       filterForm.addEventListener('submit', applyFilters);
       document.getElementById('clearFilters').addEventListener('click', clearFilters);
+      window.onload = function() {
+        var hangoutButton = document.getElementById("applyFilters");
+
+          hangoutButton.click(); // this will trigger the click event
+      };
 
     // if products are updated later, call populateOptions() again.
   })();
