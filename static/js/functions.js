@@ -118,7 +118,7 @@ document.addEventListener("DOMContentLoaded", function () {
             cards.sort((a, b) => {
                 const priceA = parseFloat(a.getAttribute("data-price"));
                 const priceB = parseFloat(b.getAttribute("data-price"));
-                return ascending ? priceA - priceB : priceB - a.priceB;
+                return ascending ? priceA - priceB : priceB - priceA;
             });
 
             // Re-append in new order
