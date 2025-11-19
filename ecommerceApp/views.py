@@ -88,11 +88,11 @@ def logout_view(request):
 
 def catalogPage(request):
     products = Product.objects.all()
-    return render(request, "CatalogPage.html", {'products': products})
+    return render(request, "catalogPage.html", {'products': products})
 
 def productPage(request, productId):
     product = Product.objects.get(id=productId)
-    return render(request, "ProductPage.html", {'product': product})
+    return render(request, "productPage.html", {'product': product})
 
 @user_passes_test(is_admin, login_url="login")
 def editProductPage(request, productId):
@@ -105,7 +105,7 @@ def createProductPage(request):
     return render(request, "createProductPage.html", {'product': product})
 
 def cartPage(request):
-    return render(request, "CartPage.html")
+    return render(request, "cartPage.html")
 
 @user_passes_test(is_admin, login_url="login")
 def add_product(request):
