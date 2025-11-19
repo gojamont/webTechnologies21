@@ -171,6 +171,7 @@ def delete_product(request, product_id):
 
     return redirect("edit_product", product_id=product.id)
 
+# @login_required
 def checkout(request):
     return render(request, "checkout.html")
 

@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const container = document.getElementById('receiptContainer');
   const confirmBtn = document.getElementById('confirmPurchaseBtn');
   const printBtn = document.getElementById('printReceiptBtn');
+  printBtn.disabled = true;
 
   function readCart() {
     if (typeof getCart === 'function') {
@@ -144,11 +145,8 @@ document.addEventListener('DOMContentLoaded', function () {
     w.document.close();
     w.focus();
     w.print();
-    // w.close(); // optionally close after printing
+    w.close();
   });
-
-  // allow printing even before confirming (optional)
-  printBtn.disabled = false;
 });
 </script>
 
