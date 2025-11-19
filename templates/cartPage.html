@@ -8,7 +8,10 @@
     <div id="cartContainer">
         </div>
     <div id="cartTotal" style="margin-top:2em; font-weight:600;"></div>
-    <button id="clearCartBtn" style="margin-top:1em;">Clear Cart</button>
+    <div style="margin-top:1em; display:flex; gap:1em;">
+        <button id="clearCartBtn" style="padding:0.5em 1em;">Clear Cart</button>
+        <button id="checkoutBtn" style="padding:0.5em 1em; background:#2ecc71;color:white;border:none;border-radius:6px;cursor:pointer;" disabled>Checkout</button>
+    </div>
 </section>
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -18,12 +21,14 @@ document.addEventListener("DOMContentLoaded", function () {
         const cart = getCart(); // This global function works
         const container = document.getElementById("cartContainer");
         const totalDiv = document.getElementById("cartTotal");
+        const checkoutBtn = document.getElementById("checkoutBtn");
         container.innerHTML = "";
         let total = 0;
 
         if (cart.length === 0) {
             container.innerHTML = "<p>Your cart is empty.</p>";
             totalDiv.textContent = "";
+            if (checkoutBtn) checkoutBtn.disabled = true;
             return;
         }
 
@@ -45,6 +50,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         totalDiv.textContent = "Total: $" + total.toFixed(2);
 
+        // enable checkout when there's at least one item
+        if (checkoutBtn) checkoutBtn.disabled = false;
+
         // Attach remove handlers
         document.querySelectorAll(".removeCartBtn").forEach(btn => {
             btn.addEventListener("click", function () {
@@ -61,6 +69,21 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem("cart");
         renderCart();
     });
+
+    // Checkout handler: navigate to /checkout (change to desired endpoint)
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    if (checkoutBtn) {
+        checkoutBtn.addEventListener("click", function () {
+            const cart = getCart();
+            if (!cart || cart.length === 0) {
+                alert("Your cart is empty.");
+                return;
+            }
+            // If you have a checkout page, go there:
+            window.location.href = "/checkout";
+            // Alternatively, implement an AJAX checkout/create-order call here.
+        });
+    }
 
     renderCart();
 });

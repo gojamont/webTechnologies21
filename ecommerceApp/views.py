@@ -171,6 +171,9 @@ def delete_product(request, product_id):
 
     return redirect("edit_product", product_id=product.id)
 
+def checkout(request):
+    return render(request, "checkout.html")
+
 @login_required
 @require_POST
 def add_to_cart_api(request):

@@ -1,0 +1,158 @@
+{% extends "index.html" %}
+
+{% block title %}Checkout{% endblock %}
+
+{% block main %}
+<section class="checkoutSection">
+    <h1>Checkout</h1>
+
+    <div id="receiptContainer" style="max-width:800px;margin:1.5em auto;background:#fff;padding:1.5em;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+        <!-- Receipt will be rendered here -->
+    </div>
+
+    <div style="max-width:800px;margin:0.5em auto;display:flex;gap:0.75em;">
+        <button id="confirmPurchaseBtn" style="padding:0.6em 1em;background:#2ecc71;color:#fff;border:none;border-radius:6px;cursor:pointer;">Confirm Purchase</button>
+        <button id="printReceiptBtn" style="padding:0.6em 1em;background:#3498db;color:#fff;border:none;border-radius:6px;cursor:pointer;">Print Receipt</button>
+        <a href="/" style="align-self:center;margin-left:auto;color:#555;text-decoration:underline;">Continue shopping</a>
+    </div>
+</section>
+
+<script>
+/*
+ Uses existing getCart()/saveCart() if available (functions.js).
+ Falls back to localStorage('cart') if those globals are missing.
+
+ When Confirm Purchase is clicked the cart is cleared and a "receipt" object
+ is saved to localStorage under 'lastReceipt' so you can inspect it later.
+*/
+document.addEventListener('DOMContentLoaded', function () {
+  const container = document.getElementById('receiptContainer');
+  const confirmBtn = document.getElementById('confirmPurchaseBtn');
+  const printBtn = document.getElementById('printReceiptBtn');
+
+  function readCart() {
+    if (typeof getCart === 'function') {
+      try { return getCart() || []; } catch (e) { /* fallthrough */ }
+    }
+    try {
+      const raw = localStorage.getItem('cart');
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveCartLocal(cart) {
+    if (typeof saveCart === 'function') {
+      try { saveCart(cart); return; } catch (e) { /* fallthrough */ }
+    }
+    try { localStorage.setItem('cart', JSON.stringify(cart)); } catch (e) {}
+  }
+
+  function formatMoney(n) {
+    return '$' + parseFloat(n || 0).toFixed(2);
+  }
+
+  function renderReceipt(receipt) {
+    // receipt: {items: [...], total, id, date}
+    const itemsHtml = receipt.items.map((it, i) => {
+      const img = it.img ? `<img src="${it.img}" style="width:56px;height:56px;object-fit:cover;border-radius:4px;margin-right:12px;">` : '';
+      return `
+        <div style="display:flex;align-items:center;padding:0.6em 0;border-bottom:1px solid #eee;">
+          ${img}
+          <div style="flex:1">
+            <div style="font-weight:600">${it.title || 'Item'}</div>
+            <div style="color:#666;font-size:0.9em;">Qty: ${it.quantity || 1}</div>
+          </div>
+          <div style="min-width:90px;text-align:right;font-weight:600">${formatMoney(it.price)}</div>
+        </div>
+      `;
+    }).join('');
+
+    container.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75em;">
+        <div>
+          <div style="font-size:1.1em;font-weight:700">Receipt</div>
+          <div style="color:#666;font-size:0.9em;">Order #: <strong>${receipt.id}</strong></div>
+          <div style="color:#666;font-size:0.9em;">${new Date(receipt.date).toLocaleString()}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:1em;color:#333;font-weight:700">${receipt.items.length} item(s)</div>
+          <div style="font-size:0.9em;color:#666">Total</div>
+          <div style="font-size:1.25em;color:#000;font-weight:800">${formatMoney(receipt.total)}</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid #eee;padding-top:0.5em">${itemsHtml}</div>
+      <div style="margin-top:0.75em;display:flex;justify-content:flex-end;">
+        <div style="text-align:right">
+          <div style="color:#666;font-size:0.9em;">Subtotal</div>
+          <div style="font-weight:700;font-size:1.05em">${formatMoney(receipt.total)}</div>
+        </div>
+      </div>
+    `;
+  }
+
+  // Build receipt object from cart. If items don't have quantity, assume 1.
+  function buildReceiptFromCart(cart) {
+    const items = cart.map(it => ({
+      title: it.title,
+      price: parseFloat(it.price) || 0,
+      img: it.img || '',
+      quantity: it.quantity || 1
+    }));
+    const total = items.reduce((s, it) => s + (it.price * (it.quantity || 1)), 0);
+    return {
+      id: 'ORD-' + Date.now().toString(36).toUpperCase(),
+      date: new Date().toISOString(),
+      items,
+      total: parseFloat(total.toFixed(2))
+    };
+  }
+
+  // initial render: show current cart as a "pending receipt"
+  const cart = readCart();
+  if (!cart || cart.length === 0) {
+    container.innerHTML = '<p>Your cart is empty. Add items before checking out.</p>';
+    confirmBtn.disabled = true;
+    printBtn.disabled = true;
+    return;
+  }
+
+  const pendingReceipt = buildReceiptFromCart(cart);
+  renderReceipt(pendingReceipt);
+
+  confirmBtn.addEventListener('click', function () {
+    // Simulate order confirmation: save receipt and clear cart
+    try {
+      localStorage.setItem('lastReceipt', JSON.stringify(pendingReceipt));
+    } catch (e) { /* ignore storage errors */ }
+
+    saveCartLocal([]); // clear cart via existing helper or localStorage fallback
+
+    // Show a simple confirmation message and keep the receipt visible
+    confirmBtn.disabled = true;
+    printBtn.disabled = false;
+    container.insertAdjacentHTML('afterbegin', `<div style="padding:0.6em;margin-bottom:0.6em;border-radius:6px;background:#e9ffef;color:#1a7a36;font-weight:600;">Purchase confirmed — thank you!</div>`);
+  });
+
+  printBtn.addEventListener('click', function () {
+    // Print only the receipt container
+    const html = container.innerHTML;
+    const w = window.open('', '', 'width=700,height=800');
+    if (!w) { alert('Pop-up blocked. Please allow pop-ups to print.'); return; }
+    w.document.write('<html><head><title>Receipt</title></head><body>');
+    w.document.write('<div style="font-family:Arial,Helvetica,sans-serif;margin:1em;">' + html + '</div>');
+    w.document.write('</body></html>');
+    w.document.close();
+    w.focus();
+    w.print();
+    // w.close(); // optionally close after printing
+  });
+
+  // allow printing even before confirming (optional)
+  printBtn.disabled = false;
+});
+</script>
+
+<style>
+.checkoutSection { max-width:900px;margin:2em auto;padding:0 1em; }
+</style>
+{% endblock %}
