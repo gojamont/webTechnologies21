@@ -27,6 +27,19 @@ main {
     overflow: hidden; /* !!! */
 }
 
+ul {
+    display: inline flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 1.5em;
+}
+
+li {
+    align-content: center;
+}
+
+/* nav stuff */
 nav {
     position: relative;
     display: flex;
@@ -35,32 +48,11 @@ nav {
     align-items: center;
 }
 
-a {
-    text-decoration: none;
-    white-space: nowrap;
-}
-
-ul {
-    list-style: none;
-    padding: 0;
-}
-
-li {
-    align-content: center;
-}
-
-/* children of nav */
-nav ul {
-    display: inline flex;
-    list-style-type: none;
-    gap: 1.5em;
-}
-
 .nav-left {
-    flex: 0.2;
+    flex: 0.1;
 }
 .nav-center {
-    flex: 0.7;
+    flex: 0.8;
 }
 .nav-center li a {position: relative; padding-bottom: 0.5rem;}
 
@@ -70,7 +62,7 @@ nav ul {
     background-color: #fff;
     transform: scaleX(0);
     transform-origin: center;
-    transition: transform 0.5s ease-out;
+    transition: transform 0.3s ease-out;
     width: 100%;
     bottom: 0;
     left: 0;
@@ -85,7 +77,15 @@ nav ul {
     flex: 0.1;
 }
 
-/* icon display -- THIS IS THE CORRECTED RULE */
+nav a {
+    white-space: nowrap;
+}
+
+a {
+    text-decoration: none;
+}
+
+/* icon display */
 li:has(#menu) {
     display: none;
 }
@@ -95,16 +95,12 @@ header, footer {
     display: flex;
     width: 100%;
     z-index: 3;
-    padding: 1rem;
+    padding: 2em;
     background-color: black;
 }
 
 header {
     top: 0;
-}
-
-.nav-center {
-    font-family: inherit;
 }
 
 header, header a, footer, footer a, nav, nav a {
@@ -114,14 +110,6 @@ header, header a, footer, footer a, nav, nav a {
 footer{
     bottom: 0;
     min-height: 200px;
-    background-color: black;
-    padding: 1em;
-    font-family: inherit;
-}
-
-footer p {
-    white-space: pre-line;
-    line-height: 1.5rem;
 }
 
 /* side menu and overlay */
@@ -183,6 +171,9 @@ img {
     border-radius: var(--button-border-radius);
     padding: 1rem;
     font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
 }
 
 .button:hover {

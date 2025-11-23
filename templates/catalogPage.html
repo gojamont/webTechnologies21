@@ -57,13 +57,11 @@
 
 <section class="productSection">
   <h1>Products</h1>
-  <hr>
 
     {% if request.user.is_authenticated and request.user.is_staff %}
         <a href="{% url 'add_product' %}" 
-           style="display:inline-block; margin-bottom:1em; padding:0.5em 1em; 
-                  background:green; color:white; border-radius:5px; text-decoration:none;">
-            + Add Product
+        class="button addProductBtn">
+        + Add Product
         </a>
     {% endif %}
 
@@ -76,13 +74,13 @@
         <img class="ProductImage" src="{{ product.image_url|default:'#' }}" alt="{{ product.name }}">
       </a>
       <a href="{% url 'product' productId=product.id %}">
-        <p class="productTitle">{{ product.name }}</p>
+        <h2 class="productTitle">{{ product.name }}</h2>
       </a>
-      <strong>
-        <p class="productPrice">${{ product.price }}</p>
-      </strong>
 
-      <button class="button add-to-cart-btn">Add to Cart</button>
+      <div class="priceAndButtonDiv">
+        <span class="productPrice">${{ product.price }}</span>
+        <button class="button add-to-cart-btn">Add to Cart</button>
+      </div>
     </div>
     {% empty %}
     <p>No products available.</p>

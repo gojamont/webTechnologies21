@@ -1,13 +1,29 @@
 main {
     display: flex;
+    max-height: 100vh;
 }
 
-main div {
+main div, form div {
     width: 50%;
-    padding: 1rem;
+    padding: 1em;
+    margin: 1em;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: var(--button-border-radius);
 }
 
 img {
     width: 100%;
     aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+form {
+    display: contents;
+}
+
+form .detailsDiv {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    padding: 1em;
 }

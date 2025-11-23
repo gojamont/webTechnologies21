@@ -1,8 +1,10 @@
 @keyframes navBar-fade-in {
     from{
-        background-color: rgba(0,0,0,0.0);
+        background-color: transparent;
+        backdrop-filter: none;
     }to{
-        background-color: rgba(0,0,0, 1);
+        background-color: rgba(0,0,0, 0.8);
+        backdrop-filter: blur(5px);
     }
 }
 
@@ -10,13 +12,28 @@
     background: url('../images/backgroundImage.jpg') no-repeat;
     background-size: cover;
     background-position: center;
+    height: 100vh;
     width: 100%;
-    aspect-ratio: 16 / 9; 
     position: relative;
     align-items: center;
     justify-content: center;
     display: flex;
-    height: 100vh;
+    box-shadow: 0 0 5px black inset;
+    animation: span linear both;
+    animation-timeline: scroll(root);
+    animation-range: 0 100vh;
+}
+
+@keyframes span {
+  from {
+    background-position-x: right;
+    background-position-y: bottom;
+  }
+
+  to {
+    background-position-x: left;
+    background-position-y: top;
+  }
 }
 
 .backgroundImage::before {
@@ -34,33 +51,35 @@
     border: 1px solid white;
     border-radius: var(--button-border-radius);
     background-color: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
     color: white;
     font-size: 2rem;
     display: flex;
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    box-shadow: 0 0 1.5rem black;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0 0 5px black;
+    transition: all 0.3s ease;
 }
 
 .discoverBtn:hover {
-    box-shadow: none;
+    background-color: rgba(255, 255, 255, 0.4);
 }
-
 
 header {
     position: fixed;
 }
+
 header, footer {
-    background-color: rgba(0, 0, 0, .8);
+    background-color: rgba(0,0,0, .8);
+    backdrop-filter: blur(5px);
     animation: navBar-fade-in linear;
     animation-timeline: scroll(root);
     animation-range: 0 300px;
 }
 
 .category-gallery, .promo-container {
-    padding: 1em 4em 2em;
+    padding: 2em;
 }
 
 .category-gallery h2 {
@@ -70,7 +89,7 @@ header, footer {
 .category-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 1em;
+    gap: 2em;
 }
 
 .category-card {
@@ -79,6 +98,7 @@ header, footer {
     position: relative;
     aspect-ratio: 1 / 1;
     overflow: hidden;
+    box-shadow: 0 0 5px black;
 }
 .category-card-overlay {
     background-color: rgba(0, 0, 0, 0.6);
@@ -140,4 +160,8 @@ header, footer {
         grid-template-columns: repeat(1, 1fr);
         gap: 1em;
     }
+}
+
+article img {
+    box-shadow: 0 0 5px black;
 }

@@ -7,11 +7,7 @@ main {
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     /* Let the card content determine the row height */
     grid-auto-rows: auto;
-    gap: 1em;
-}
-
-/* Removed .ProductCard from this rule */
-.ProductsContainer {
+    gap: 2em;
     align-items: center;
 }
 
@@ -22,11 +18,33 @@ main {
     width: 100%;
     height: 100%;
     transition: box-shadow 0.25s ease-in;
+    align-items: center;
     
     /* ADDED: Use flexbox to stack content vertically */
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Helps keep button at the bottom */
+}
+
+.ProductCard:hover{
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.ProductCard * {
+    width: 100%;
+}
+
+.priceAndButtonDiv {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(217, 217, 217, 0.48);
+    border-radius: var(--button-border-radius);
+    padding: 1rem;
+}
+
+.ProductCard h2 {
+    text-align: center;
 }
 
 /* * ADDED: This is the main fix. 
@@ -35,14 +53,9 @@ main {
 */
 .ProductImage {
     width: 100%;
-    aspect-ratio: 4/3;
+    aspect-ratio: 1/1;
     object-fit: cover;
     border-radius: 12px;
-}
-
-
-.ProductCard:hover{
-    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
 .productSideBar {
@@ -55,8 +68,8 @@ main {
 
 .productSection {
     flex: 0.8;
-    margin: 0 1em 1em 1em;
-    gap: 1em;
+    margin: 0 2em 2em 2em;
+    gap: 2em;
 }
 
 .leftFilterBar {
@@ -78,4 +91,17 @@ main {
 .filter-actions {
     display: flex;
     justify-content: space-between;
+}
+
+.filter-dropdown {
+    display: flex;
+    flex-direction: column;
+}
+
+.addProductBtn {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    margin: 1em;
+    background: green;
 }
