@@ -33,4 +33,7 @@ urlpatterns = [
     path('register', views.register, name="register"),
     path('cart', views.cartPage, name="cart"),
     path('api/cart/add', views.add_to_cart_api, name='api_add_to_cart'),
+    path("verify-email/<uidb64>/<token>/", views.verify_email, name="verify_email"),
+    path("forgot-password/", views.forgot_password, name="forgot_password"),
+    path("reset-password/<uidb64>/<token>/", views.reset_password, name="reset_password"),
 ]

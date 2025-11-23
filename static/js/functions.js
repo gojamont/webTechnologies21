@@ -48,7 +48,8 @@ function registerUser(e) {
 
             // showing alert when user is registered successfully
             if (data.success) {
-                window.location.href = '/login';
+                // window.location.href = '/login'; -- cant redirect to login page after registration - need to verify email first
+                alert('Registration successful! Please check your email to verify your account.');
             }
             else {
                 error_message.textContent = data.message;
@@ -91,10 +92,15 @@ function loginUser(e) {
 
             // showing alert when user is registered successfully
             if (user_data.success) {
+                if(user_data.message === 'User logged in successfully'){
                 window.location.href = '/';
+                }
+                else{
+                    alert(user_data.message);
+                }
             }
             else {
-                error_message.textContent = data.message;
+                error_message.textContent = user_data.message;
                 error_message.style.display = 'block';
             }
     })

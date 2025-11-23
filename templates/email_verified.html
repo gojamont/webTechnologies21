@@ -1,0 +1,13 @@
+{% extends "index.html" %}
+
+{% block title %}Email Verified{% endblock %}
+
+{% load static %}
+{% block styles %}<link rel="stylesheet" href="{% static 'css/loginPageStyles.css' %}">{% endblock %}
+
+{% block main %}
+<div style="text-align:center; margin-top:50px;">
+    <h1>✅ Your email has been verified!</h1>
+    <p>You can now <a href="/login">log in</a> to your account.</p>
+</div>
+{% endblock %}
