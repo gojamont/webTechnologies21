@@ -2,7 +2,8 @@
 
 {% load static %}
 {% block styles %}
-<link rel="stylesheet" href="{% static 'css/catalogPageStyles.css' %}">{% endblock %}
+<link rel="stylesheet" href="{% static 'css/catalogPageStyles.css' %}">
+{% endblock %}
 
 {% block title %}Catalog{% endblock %}
 
@@ -65,7 +66,11 @@
         </a>
     {% endif %}
 
-  <div class="ProductsContainer">
+  <div class="search-container">
+    <input type="text" id="productSearch" class="search-input" placeholder="Search products...">
+  </div>
+
+  <div class="ProductsContainer" id="productsContainer">
     {% for product in products %}
     <div class="ProductCard" data-price="{{ product.price }}" data-category="{{ product.category|default:'' }}"
       data-brand="{{ product.brand|default:'' }}" data-img="{{ product.image_url|default:'#' }}" data-id="{{ product.id }}">
@@ -90,7 +95,7 @@
 
 <script>
   (function () {
-    // ... (existing filter/sort code remains unchanged) ...
+    // Existing references
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const category = urlParams.get('category')
@@ -100,19 +105,17 @@
     const filterForm = document.getElementById('filterForm');
     const categoryOptions = document.getElementById('categoryOptions');
     const brandOptions = document.getElementById('brandOptions');
-    const productsContainer = document.querySelectorAll('.ProductCard');
     const priceMinEl = document.getElementById('priceMin');
     const priceMaxEl = document.getElementById('priceMax');
-    const products = Array.from(document.querySelectorAll('.ProductCard') || []);
+    
+    // Dynamic references (will be updated after AJAX)
+    let productsContainer = document.querySelectorAll('.ProductCard');
+    let products = Array.from(document.querySelectorAll('.ProductCard') || []);
 
     function toggleFilterMenu() {
       const expanded = filterToggle.getAttribute('aria-expanded') === 'true';
       filterToggle.setAttribute('aria-expanded', String(!expanded));
-      if (expanded) {
-        filterMenu.hidden = true;
-      } else {
-        filterMenu.hidden = false;
-      }
+      filterMenu.hidden = expanded;
     }
 
     filterToggle.addEventListener('click', function (e) {
@@ -120,7 +123,6 @@
       toggleFilterMenu();
     });
 
-    //close dropdown when clicking outside
     document.addEventListener('click', function () {
       filterToggle.setAttribute('aria-expanded', 'false');
       filterMenu.hidden = true;
@@ -130,12 +132,13 @@
       e.stopPropagation();
     });
 
-    // from productcards data attrs
     function populateOptions() {
       const categories = new Set();
-
       const brands = new Set();
 
+      // Refresh container reference
+      productsContainer = document.querySelectorAll('.ProductCard');
+      
       productsContainer.forEach(card => {
         const c = (card.dataset.category || '').trim();
         const b = (card.dataset.brand || '').trim();
@@ -170,11 +173,9 @@
       }
 
       buildCheckboxList(categoryOptions, categories, 'category');
-      console.log(categories);
       buildCheckboxList(brandOptions, brands, 'brand');
     }
 
-    // client-side
     function applyFilters(e) {
       if (e) e.preventDefault();
 
@@ -184,6 +185,9 @@
       const selectedCategories = Array.from(filterForm.querySelectorAll('input[name="category"]:checked')).map(i => i.value);
       const selectedBrands = Array.from(filterForm.querySelectorAll('input[name="brand"]:checked')).map(i => i.value);
 
+      // Refresh reference
+      productsContainer = document.querySelectorAll('.ProductCard');
+      
       productsContainer.forEach(card => {
         let show = true;
         const price = parseFloat(card.dataset.price);
@@ -202,10 +206,14 @@
 
     function clearFilters() {
       filterForm.reset();
+      productsContainer = document.querySelectorAll('.ProductCard');
       productsContainer.forEach(card => card.style.display = '');
     }
 
     function setPriceBounds() {
+      // Refresh list
+      products = Array.from(document.querySelectorAll('.ProductCard') || []);
+      
       const prices = products
         .map(card => parseFloat(card.dataset.price))
         .filter(n => !Number.isNaN(n));
@@ -245,67 +253,118 @@
       });
     }
 
+    // --- AJAX Search Implementation ---
+    const searchInput = document.getElementById('productSearch');
+    let debounceTimer;
+
+    searchInput.addEventListener('input', function(e) {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(() => {
+        const query = e.target.value;
+        const url = new URL(window.location.href);
+        url.searchParams.set('search', query);
+
+        fetch(url, {
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+        .then(response => response.text())
+        .then(html => {
+          // Parse the returned HTML
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const newContainer = doc.querySelector('.ProductsContainer');
+          
+          if (newContainer) {
+            const currentContainer = document.querySelector('.ProductsContainer');
+            currentContainer.innerHTML = newContainer.innerHTML;
+            
+            // Re-initialize filter logic with new elements
+            productsContainer = document.querySelectorAll('.ProductCard');
+            products = Array.from(productsContainer);
+            
+            // Re-run setup functions
+            populateOptions();
+            setPriceBounds();
+            
+            // Re-apply any active client-side filters
+            applyFilters();
+          }
+        })
+        .catch(err => console.error('Search failed', err));
+      }, 300); // 300ms debounce
+    });
+
+    // Initial Setup
     setPriceBounds();
     clampOnBlur(priceMinEl);
     clampOnBlur(priceMaxEl);
-      populateOptions();
-      filterForm.addEventListener('submit', applyFilters);
-      document.getElementById('clearFilters').addEventListener('click', clearFilters);
-      window.onload = function() {
-        var hangoutButton = document.getElementById("applyFilters");
+    populateOptions();
+    filterForm.addEventListener('submit', applyFilters);
+    document.getElementById('clearFilters').addEventListener('click', clearFilters);
+    
+    // Simulate click to set initial state if needed
+    const applyBtn = document.getElementById("applyFilters");
+    if(applyBtn) applyBtn.click();
 
-          hangoutButton.click(); // this will trigger the click event
-      };
-
-    // if products are updated later, call populateOptions() again.
   })();
 </script>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll(".add-to-cart-btn").forEach(btn => {
-      btn.addEventListener("click", function () {
-        const card = this.closest(".ProductCard");
-        const productId = card.dataset.id; 
-        const title = card.querySelector(".productTitle").textContent.trim();
-        // Get the token we added to the top of the body
-        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    // Changed to Event Delegation to support AJAX loaded elements
+    const container = document.querySelector('.ProductsContainer');
+    
+    if (container) {
+        container.addEventListener('click', function(e) {
+            if (e.target && e.target.classList.contains('add-to-cart-btn')) {
+                const btn = e.target;
+                const card = btn.closest(".ProductCard");
+                const productId = card.dataset.id; 
+                const title = card.querySelector(".productTitle").textContent.trim();
+                
+                // Check if csrf token exists safely
+                const csrfInput = document.querySelector('[name=csrfmiddlewaretoken]');
+                const csrfToken = csrfInput ? csrfInput.value : '';
 
-        // 1. Keep existing LocalStorage logic for UI feedback
-        const price = card.dataset.price;
-        const img = card.dataset.img;
-        const item = {
-          title: title,
-          price: price,
-          img: img
-        };
+                const price = card.dataset.price;
+                const img = card.dataset.img;
+                const item = {
+                  title: title,
+                  price: price,
+                  img: img
+                };
 
-        // Use the global functions from functions.js
-        const cart = getCart();
-        cart.push(item);
-        saveCart(cart);
+                // Use the global functions from functions.js (assuming they exist globally)
+                if (typeof getCart === 'function' && typeof saveCart === 'function') {
+                    const cart = getCart();
+                    cart.push(item);
+                    saveCart(cart);
+                }
 
-        // 2. New AJAX Call
-        fetch('/api/cart/add', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': csrfToken
-            },
-            body: JSON.stringify({ 'product_id': productId })
-        })
-        .then(response => {
-            if (response.ok) {
-                console.log("Saved to database!");
-            } else {
-                console.log("User not logged in or error occurred.");
+                // AJAX Call
+                fetch('/api/cart/add', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ 'product_id': productId })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        console.log("Saved to database!");
+                    } else {
+                        console.log("User not logged in or error occurred.");
+                    }
+                })
+                .catch(err => console.error(err));
+
+                alert("Added " + title + " to cart!");
             }
-        })
-        .catch(err => console.error(err));
-
-        alert("Added " + title + " to cart!");
-      });
-    });
+        });
+    }
   });
 </script>
 {% endblock %}

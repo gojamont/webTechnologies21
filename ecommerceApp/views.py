@@ -4,12 +4,12 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.views.decorators.http import require_POST
+from django.db.models import Q
 
 import json
 
 def is_admin(user):
     return user.is_authenticated and user.is_staff 
-
 
 # Create your views here.
 
@@ -87,7 +87,16 @@ def logout_view(request):
     return redirect('/')
 
 def catalogPage(request):
-    products = Product.objects.all()
+    search_query = request.GET.get('search', '')
+    
+    if search_query:
+        products = Product.objects.filter(
+            Q(name__icontains=search_query) | 
+            Q(description__icontains=search_query)
+        )
+    else:
+        products = Product.objects.all()
+        
     return render(request, "catalogPage.html", {'products': products})
 
 def productPage(request, productId):
